@@ -399,10 +399,25 @@ function wordCounter(sentence) {
   return obj
 }
 
+function wordCounterE(sentence) {
+  return sentence.split(' ').reduce(function(acc,val){
+    if(!acc[val]){
+      acc[val] = 1;
+    }else{
+      acc[val]++;
+    }    
+    return acc;
+  },{});
+}
+
 console.log('\ntask 4:');
 
 console.log(
   wordCounter('Both Java and Java Script is programming and programming OOPBased Language'),
+);
+
+console.log(
+  wordCounterE('Both Java and Java Script is programming and programming OOPBased Language'),
 );
 
 /*
@@ -419,6 +434,7 @@ console.log(
  */
 
 console.log(wordCounter('asd qwe asd'));
+console.log(wordCounterE('asd qwe asd'));
 /*
  {
  asd:2
@@ -427,6 +443,7 @@ console.log(wordCounter('asd qwe asd'));
  * */
 
 console.log(wordCounter('url http url www url http'));
+console.log(wordCounterE('url http url www url http'));
 
 /*
  {
