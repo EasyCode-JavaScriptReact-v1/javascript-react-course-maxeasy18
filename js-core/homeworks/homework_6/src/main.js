@@ -401,11 +401,7 @@ function wordCounter(sentence) {
 
 function wordCounterE(sentence) {
   return sentence.split(' ').reduce(function(acc,val){
-    if(!acc[val]){
-      acc[val] = 1;
-    }else{
-      acc[val]++;
-    }    
+    acc[val] = !acc[val] ? 1 : ++acc[val]; 
     return acc;
   },{});
 }
@@ -499,7 +495,7 @@ function uniqueElements(arr) {
       }
   });
 
-  return _resArr.join(',');
+  return _resArr;
 
 }
 
