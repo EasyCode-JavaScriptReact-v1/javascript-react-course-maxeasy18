@@ -256,12 +256,15 @@ console.log('\n\nЗадача SUPER\n');
 
  * */
 
+ /*
+  немного непонятная постановка задачи, в плене сделать объект, но вызвать его как функцию.
+  Потому сделал не объект а функцию, которая возвращает даный нужный объект.
+ */
+
 function $(node){
   let obj = {};
-
-  this.value = '';
-
-  this.add = function(node,text){
+  obj.value = '';
+  obj.add = function(node, text){
 
     if(typeof node !== 'string'){
       console.log('ERROR: value must be a string!');
@@ -276,22 +279,20 @@ function $(node){
     }else{
       this.value = _newNode;
     }
-
-    console.log(this.value);
     return this;
   }
 
-  this.render = function(){
+  obj.render = function(){
     let value = this.value;
     this.value = '';
+    console.log(value);    
     return value;
   }
-
-  this.toString = function(){
-    return this.render();
+  if(node){
+    return obj.add(node);
+  }else{
+    return obj;    
   }
-  return ;
-  // return this.add(node);
 
 };
 
