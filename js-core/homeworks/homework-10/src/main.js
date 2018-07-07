@@ -102,7 +102,7 @@ ezjQuery
 
 console.log('\n\nЗадача 3\n');
 var ezjQuery3 = {
-  value : '',
+  value : [],
 
   add(node,text){
     if(typeof node !== 'string'){
@@ -111,26 +111,26 @@ var ezjQuery3 = {
     }
 
     let _text = text || '';
-    let _newNode = `<${node}>${_text}</${node}>`;
+    this.value.push([node,_text]);
 
-    if( this.value !== ''){
-      this.value = this.value.replace('></', `>${_newNode}</`);
-    }else{
-      this.value = _newNode;
-    }
-
-    console.log(this.value);
+    console.log(this._bildString());
     return this;
   },
 
+  _bildString(){
+    return this.value.reduceRight(function(resString,node){
+        return `<${node[0]}>${node[1]}${resString}</${node[0]}>`;
+    },'')
+  },
+
   render(){
-    let value = this.value;
-    this.value = '';
-    return value;
+    let res = this._bildString();
+    this.value = [];
+    return res;
   },
 
   toString(){
-    return this.render();
+    return this._bildString();
   }
 
 };
@@ -143,21 +143,22 @@ var ezjQuery3 = {
 
 var helloList = ezjQuery3
   .add('body') // <body></body>
-  .add('div') // <body><div></div></body>
-  .add('ul') // <body><div><ul></ul></div></body>
+  .add('div','block') // <body><div></div></body>
+  .add('ul','list') // <body><div><ul></ul></div></body>
   .add('li', 'Hello') //<body><div><ul><li>Hello</li></ul></div></body>
-  .render();
-
-console.log(helloList); // <body><div><ul><li>Hello</li></ul></div></body>
-
+  // .render();
+;
+console.log('helloList.toString: ', helloList.toString()); // <body><div><ul><li>Hello</li></ul></div></body>
+helloList.render();
 //  Обратите внимание, что после вызова render создание строки началось сначала
-console.log('ВЫзвали render, сбросли строку')
+console.log('ВЫзвали render, сбросли строку');
+
 var bodyDiv = ezjQuery3
   .add('body') //<body></body>
   .add('div') //<body><div></div></body>
   .render();
 
-console.log(bodyDiv); //<body><div></div></body>
+console.log('bodyDiv.toString: ', bodyDiv.toString()); //<body><div></div></body>
 
 // Для выполнивших все задания
 // сделайте document.write(helloList) увидите результат :)
@@ -182,7 +183,7 @@ console.log('\n\nЗадача SUPER\n');
 
 function $(node){
   let obj = {};
-  obj.value = '';
+  obj.value = [];
 
   obj.add = function(node, text){
 
@@ -192,22 +193,21 @@ function $(node){
     }
 
     let _text = text || '';
-    let _newNode = `<${node}>${_text}</${node}>`;
-
-    if( this.value !== ''){
-      this.value = this.value.replace('></', `>${_newNode}</`);
-    }else{
-      this.value = _newNode;
-    }
-    
+    this.value.push([node,_text]);
     return this;
   }
 
+  obj._bildString = function(){
+    return this.value.reduceRight(function(resString,node){
+        return `<${node[0]}>${node[1]}${resString}</${node[0]}>`;
+    },'')
+  }
+
   obj.render = function(){
-    let value = this.value;
-    this.value = '';
-    console.log(value);    
-    return value;
+    let res = this._bildString();
+    this.value = [];
+    console.log(res);
+    return res;
   }
 
   if(node){
