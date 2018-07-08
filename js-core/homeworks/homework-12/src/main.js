@@ -195,3 +195,13 @@ let worker_2 = new Worker2(worker_2Info, person_2Info);
  * которую мы обернули
  *
 */
+
+
+function createWraper(){
+	return function(){
+		console.log(arguments);
+	}
+}
+
+let wraper1 = createWraper();
+wraper1('g',[],123);
