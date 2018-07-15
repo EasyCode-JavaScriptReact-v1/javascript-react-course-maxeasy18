@@ -112,5 +112,98 @@ TASK 3
   Изначально на странице должен быть только <body>,
   вызывая методы объекта нужно создать dom-элементы
 */
+let app = {
+  render(){
+  let div = document.createElement('div');
+  div.setAttribute("class", "test-block");
 
-// app.render();
+  let head = document.createElement('p');
+  head.innerText = 'Тест по програмированию'
+  div.appendChild(head);
+
+  let form = document.createElement('form');
+  
+  let questionList  = document.createElement('ol');
+
+  let questions = [
+    {
+      question : 'Вопрос номер 1',
+      answers: [
+        'вариант ответа 1',
+        'вариант ответа 2',
+        'вариант ответа 3'
+      ]
+    },
+    {
+      question : 'Вопрос номер 2',
+      answers: [
+        'вариант ответа 1',
+        'вариант ответа 2',
+        'вариант ответа 3'
+      ]
+    },
+    {
+      question : 'Вопрос номер 3',
+      answers: [
+        'вариант ответа 1',
+        'вариант ответа 2',
+        'вариант ответа 3'
+      ]
+    }    
+  ]
+
+  questions.forEach((questionObj,questionIndex)=>{
+    let questionBlock = document.createElement('li');
+    questionBlock.innerText = questionObj.question;
+    
+    let answersBlock = document.createElement('ul');
+
+    questionObj.answers.forEach( (answerText) => {
+
+      let answerLi = document.createElement('li');
+      let labelForAnswer = document.createElement('label');
+
+      let inputAnswer = document.createElement('input');
+      inputAnswer.type = 'checkbox';
+      inputAnswer.name = 'answer_question_' + (questionIndex + 1);
+
+      labelForAnswer.appendChild(inputAnswer);
+
+      let answerNode = document.createTextNode(answerText);
+      labelForAnswer.appendChild(answerNode);
+      answerLi.appendChild(labelForAnswer);
+
+      // answer.innerText = answerText;
+      answersBlock.appendChild(answerLi);
+    });
+
+    questionBlock.appendChild(answersBlock);
+
+
+    questionList.appendChild(questionBlock);
+
+
+  });
+
+
+  let buttonBlock = document.createElement('p');
+
+  let buttonSubmit = document.createElement('input');
+  buttonSubmit.type = 'submit';
+  buttonSubmit.name = 'submit';
+  buttonSubmit.value = 'Проверить мои рещультаты'
+  
+  buttonBlock.appendChild(buttonSubmit);
+
+  form.appendChild(questionList).appendChild(buttonBlock);
+
+  div.append(form);
+
+  document.body.appendChild(div);
+  // console.log(div);
+
+  }
+}
+
+
+app.render();
