@@ -15,11 +15,12 @@
 
 
 function PhoneApp() {
+  this.dataBaseProps = ['id','name','cname','phone'];
   this.dataBase = [
-        {id:1, name:'Name1', phone:'1111111111'},
-        {id:2, name:'Name2', phone:'2222222222'},
-        {id:3, name:'Name3', phone:'3333333333'},
-        {id:4, name:'Name4', phone:'4444444444'},
+        {id:1, name:'Nafe1', cname:'kname1', phone:'1111111111'},
+        {id:2, name:'dame2', cname:'Cname2', phone:'5222222222'},
+        {id:3, name:'hame3', cname:'qnbme3', phone:'3333333333'},
+        {id:4, name:'aame4', cname:'hname4', phone:'744224444'},
        
     ]
 }
@@ -36,7 +37,19 @@ PhoneApp.prototype.transformNumber = function(number) {
   return _res;
 }
 
-PhoneApp.prototype._validateNumber = function(number) {
+
+
+PhoneApp.prototype._prepareStringValue = function(name) {  
+  return name.toLowerCase().trim()
+}
+
+PhoneApp.prototype._compareStingValue = function(valueIn,valueBase) {  
+  return this._prepareStringValue(valueBase) === this._prepareStringValue(valueIn);
+}
+
+PhoneApp.prototype.compareName = PhoneApp.prototype._compareStingValue;
+ 
+PhoneApp.prototype.validateNumber = function(number) {
   let _numberArr = String(number).split('');
   return !_numberArr.some((value) => {
     return isNaN(value);
@@ -49,20 +62,61 @@ PhoneApp.prototype.addUser = function(user) {
 }
 
 PhoneApp.prototype.deleteUser = function(name) {
-  
+  const toDelUserIndex = this.dataBase.findIndex((user) => {
+    return this.compareName(user.name,name) || this.compareName(user.cname,name);
+  }); 
+
+  if( toDelUserIndex !== -1){
+    this.dataBase.splice(toDelUserIndex,1);
+  }  
 }
 
-PhoneApp.prototype.findUser = function(name) {}
+PhoneApp.prototype.findUser = function(name) {
+  return this.dataBase.reduce((acc,user) => {
+    if(this.compareName(user.name,name)){
+      acc.push(user);
+    }
+    return acc;
+  },[]);
 
-PhoneApp.prototype.updateUser = function(name) {}
 
-PhoneApp.prototype.sortUsersBy = function(prop) {}
+}
+
+PhoneApp.prototype.sortUsersBy = function(prop) {
+  if(!this.dataBaseProps.includes(prop)){
+    console.error('Wrong prop');
+    return false;
+  }
+  return this.dataBase.sort((a, b) => {
+    const propA = this._prepareStringValue(a[prop]); 
+    const propB = this._prepareStringValue(b[prop]); 
+    if (propA < propB) {
+      return -1;
+    }
+    if (propA > propB) {
+      return 1;
+    }
+    return 0;
+  })
+}
 
 PhoneApp.prototype.editUser = function(id, options) {
-  /*
-   options.name
-   options.
-  */  
+  const toEditUserIndex = this.dataBase.findIndex((user) => {
+    return user.id === id;
+  });
+  Object.keys(options).forEach((value) => { 
+    this.dataBase[toEditUserIndex][value] = options[value];    
+  })
+}
+
+PhoneApp.prototype.filterBy = function(prop, value) {
+  return this.dataBase.reduce((acc,user) => {
+    if( user[prop].indexOf(value) !== -1){
+      acc.push(user);
+    }
+    return acc;
+
+  },[]);
 }
 
 
