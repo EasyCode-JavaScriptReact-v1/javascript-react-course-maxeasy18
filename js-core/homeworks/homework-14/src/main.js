@@ -10,26 +10,22 @@ TASK 0. Найдите числа которые повторяются нече
 
 
 function solution(arr){
-    let _temp = {}
-    arr.forEach( function(element, index) {
-      if(_temp[element]){
-        _temp[element]++ ;
+    let _temp = arr.reduce( (acc,element) => {
+      if(acc[element]){
+        acc[element]++ ;
       }else{
-        _temp[element] = 1;
-      }      
-      // statements
-    });
+        acc[element] = 1;
+      }  
+      return acc;    
+    },{});
 
     let res = [];
-
-    Object.keys(_temp).forEach(function(value){
+    Object.keys(_temp).forEach( value => {
       if(_temp[value] % 2 !== 0){
         res.push(value);
       }
     });
-
     return res;
-
 }
 console.log(solution([12, 23, 34, 12, 12, 23, 12, 45]));
 console.log(solution([4, 4, 100, 5000, 4, 4, 4, 4, 4, 100, 100,]));
@@ -82,7 +78,6 @@ let replaceInfo = [
 
 function grandReplace(string, data){
   let res = string;
-
   return data.reduce(function(acc,elem){
     let regexp = new RegExp(elem.template,elem.templateFlags);
     return acc.replace(regexp,elem.replaceString)
@@ -113,97 +108,97 @@ TASK 3
   вызывая методы объекта нужно создать dom-элементы
 */
 let app = {
+  questions : [
+      {
+        question : 'Вопрос номер 1',
+        answers: [
+          'вариант ответа 1',
+          'вариант ответа 2',
+          'вариант ответа 3'
+        ]
+      },
+      {
+        question : 'Вопрос номер 2',
+        answers: [
+          'вариант ответа 1',
+          'вариант ответа 2',
+          'вариант ответа 3'
+        ]
+      },
+      {
+        question : 'Вопрос номер 3',
+        answers: [
+          'вариант ответа 1',
+          'вариант ответа 2',
+          'вариант ответа 3'
+        ]
+      }    
+    ],
+  _createButton(){
+    let buttonSubmit = this._makeNode('input');
+    buttonSubmit.type = 'submit';
+    buttonSubmit.name = 'submit';
+    buttonSubmit.value = 'Проверить мои рещультаты';
+    return buttonSubmit;  
+  },
+
+  _makeNode(node){
+    return document.createElement(node);
+  },
+  _createListOfQuestions(){
+    let questionList  = this._makeNode('ol');
+
+    this.questions.forEach((questionObj,questionIndex)=>{
+      let questionBlock = this._makeNode('li');
+      questionBlock.innerText = questionObj.question;
+      
+      let answersBlock = this._makeNode('ul');
+      questionObj.answers.forEach( (answerText) => {
+
+        let inputAnswer = this._makeNode('input');
+        inputAnswer.type = 'checkbox';
+        inputAnswer.name = 'answer_question_' + (questionIndex + 1);
+
+        let labelForAnswer = this._makeNode('label');
+        labelForAnswer.appendChild(inputAnswer);
+
+        let answerNode = document.createTextNode(answerText);
+        labelForAnswer.appendChild(answerNode);
+
+        let answerLi = this._makeNode('li');
+        answerLi.appendChild(labelForAnswer);
+
+        answersBlock.appendChild(answerLi);
+      });
+
+      questionBlock.appendChild(answersBlock);
+      questionList.appendChild(questionBlock);
+    });    
+    return questionList;
+  },
+  _initContainer(){
+    let div = this._makeNode('div');
+    div.setAttribute("class", "test-block"); 
+    return div;   
+  },
+  _createHead(){
+    let head = this._makeNode('p');
+    head.innerText = 'Тест по програмированию'
+    return head
+  },
   render(){
-  let div = document.createElement('div');
-  div.setAttribute("class", "test-block");
-
-  let head = document.createElement('p');
-  head.innerText = 'Тест по програмированию'
-  div.appendChild(head);
-
-  let form = document.createElement('form');
-  
-  let questionList  = document.createElement('ol');
-
-  let questions = [
-    {
-      question : 'Вопрос номер 1',
-      answers: [
-        'вариант ответа 1',
-        'вариант ответа 2',
-        'вариант ответа 3'
-      ]
-    },
-    {
-      question : 'Вопрос номер 2',
-      answers: [
-        'вариант ответа 1',
-        'вариант ответа 2',
-        'вариант ответа 3'
-      ]
-    },
-    {
-      question : 'Вопрос номер 3',
-      answers: [
-        'вариант ответа 1',
-        'вариант ответа 2',
-        'вариант ответа 3'
-      ]
-    }    
-  ]
-
-  questions.forEach((questionObj,questionIndex)=>{
-    let questionBlock = document.createElement('li');
-    questionBlock.innerText = questionObj.question;
-    
-    let answersBlock = document.createElement('ul');
-
-    questionObj.answers.forEach( (answerText) => {
-
-      let answerLi = document.createElement('li');
-      let labelForAnswer = document.createElement('label');
-
-      let inputAnswer = document.createElement('input');
-      inputAnswer.type = 'checkbox';
-      inputAnswer.name = 'answer_question_' + (questionIndex + 1);
-
-      labelForAnswer.appendChild(inputAnswer);
-
-      let answerNode = document.createTextNode(answerText);
-      labelForAnswer.appendChild(answerNode);
-      answerLi.appendChild(labelForAnswer);
-
-      // answer.innerText = answerText;
-      answersBlock.appendChild(answerLi);
-    });
-
-    questionBlock.appendChild(answersBlock);
-
-
-    questionList.appendChild(questionBlock);
-
-
-  });
-
-
-  let buttonBlock = document.createElement('p');
-
-  let buttonSubmit = document.createElement('input');
-  buttonSubmit.type = 'submit';
-  buttonSubmit.name = 'submit';
-  buttonSubmit.value = 'Проверить мои рещультаты'
-  
-  buttonBlock.appendChild(buttonSubmit);
-
-  form.appendChild(questionList).appendChild(buttonBlock);
-
-  div.append(form);
-
-  document.body.appendChild(div);
-  // console.log(div);
-
+    let container = this._initContainer();
+    let formHeader = this._createHead();
+    let form = this._makeNode('form');
+    let questionList = this._createListOfQuestions();
+    let submitButton = this._createButton();
+    let buttonBlock = this._makeNode('p');
+    buttonBlock.appendChild(submitButton);
+    form.appendChild(questionList).appendChild(buttonBlock);
+    container.appendChild(formHeader);  
+    container.appendChild(form);
+    document.body.appendChild(container);
   }
 }
-
 
 app.render();
