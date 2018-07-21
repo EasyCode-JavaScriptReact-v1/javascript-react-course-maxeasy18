@@ -26,8 +26,6 @@ function goodDev() {
   return (obj.skills || obj.experience).some(function(arrVal){
    if(typeof arrVal=== 'string'){
     return arrVal === val;
-   }else{
-    return arrVal.technology === val;
    }
   });
  
