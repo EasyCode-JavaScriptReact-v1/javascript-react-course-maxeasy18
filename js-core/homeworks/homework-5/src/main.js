@@ -15,7 +15,7 @@ let arr2 = [
   "a", 0, 0, "b", null, "c", "d", 0, 1, false, 0, 1, 0, 3, [], 0, 1, 9, 0, 0, {}, 0,  0,  9
 ];
 
-function moveZeroToEnd(arr) {
+let moveZeroToEnd = arr => {
   let zerous = [];
   return arr.reduce((acc,value) => {
     if(value !== 0){
@@ -38,8 +38,8 @@ console.log(moveZeroToEnd(arr2));
  [0,200,10,25,15] => 10
  */
 
-function minimalNumber(arr) {
-  let sortValue = function(a,b){
+let minimalNumber = arr => {
+  let sortValue = (a,b) => {
       return a-b;
   }
   arr.sort(sortValue);
@@ -57,7 +57,7 @@ console.log(minimalNumber([0, 200, 10, 25, 15]));
  nameShuffler('James Bond'); => "Bond James"
  */
 
-function nameShuffler(str){
+let nameShuffler = str => {
   return str.split(' ').reverse().join(' ');
 }
 
@@ -73,10 +73,8 @@ console.log('James Bond =>', nameShuffler('James Bond'));
  capMe(['KARLY', 'DANIEL', 'KELSEY']) // returns ['Karly', 'Daniel', 'Kelsey']
  */
 
-function capMe(arr) {
-  return arr.map(function(value){
-    return value.charAt(0).toUpperCase() + value.substring(1).toLowerCase();
-  });
+let capMe = arr => {
+  return arr.map( value => value.charAt(0).toUpperCase() + value.substring(1).toLowerCase());
 }
 console.log(capMe(['jo', 'nelson', 'jurie']));     // returns ['Jo', 'Nelson', 'Jurie']
 console.log(capMe(['KARLY', 'DANIEL', 'KELSEY'])); // returns ['Karly', 'Daniel', 'Kelsey']
