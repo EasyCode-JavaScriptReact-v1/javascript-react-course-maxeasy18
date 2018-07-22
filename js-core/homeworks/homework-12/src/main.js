@@ -32,39 +32,43 @@
  *
  * */
 
-let ctx = {
-	req: {
-		PORT: 'number',
-		url: 'string'
-	},
-	res: {
-		status: 'number',
-		message: 'string',
-		header: {
-			'content-type':'application/json'
-		}
-	}
-}
+
 
 let next = function(){
 	console.log('function NEXT');
 }
 
-function Http(){ }
+function Http(){ 
+	this.server = {}
+}
 
 Http.prototype.createServer = function(fn) {
-	this._createServer = function(...args){
-		fn(...args);
+	let ctx = {
+		req: {
+			PORT: 'number',
+			url: 'string'
+		},
+		res: {
+			status: 'number',
+			message: 'string',
+			header: {
+				'content-type':'application/json'
+			}
+		}
+	}	
+	this.server.afterListen = function(){
+		fn(ctx,next);
 	};
 	return this;
 }
 
 Http.prototype.listen = function(PORT, host) {
 	console.log(`Server running on https://${host}:${PORT}`);
-	this._createServer(ctx,next);
+	this.server.afterListen();
 }
 
 const server = new Http().createServer(function(ctx, next) {
+	console.log('Calling given function....')
   console.log('ctx:', ctx);
   console.log('next:', next);
 }).listen(3000, 'localhost');
@@ -81,12 +85,12 @@ const server = new Http().createServer(function(ctx, next) {
 // Убедиться что они имеют поля родительского класса Human
 
 
-function Human(){
-	this.name = 'John Dou';
-	this.age = 0;
-	this.sex = 'Unknown';
-	this.height = 0;
-	this.weight = 0;
+function Human(name,age,sex,height,weight){
+	this.name = name;
+	this.age = age;
+	this.sex = sex;
+	this.height = height;
+	this.weight = weight;
 }
 
 Human.prototype.drinkCoffee = function(){
@@ -101,7 +105,7 @@ function Worker(work,salary){
 //With this variant we can't see properties from Human.
 // Worker.prototype = Object.create(Human.prototype);
 // So we have to use this method.
-Worker.prototype = new Human();
+Worker.prototype = new Human('Bill', 28, 'male' , 183, 83);
 
 Worker.prototype.toWork = function(){
 	console.log('I\'m working...');
@@ -126,7 +130,7 @@ function Student(university,stipend){
 	this.stipend = stipend;
 }
 
-Student.prototype = new Human();
+Student.prototype = new Human('Steave', 18, 'male' , 175, 75);
 
 Student.prototype.toWatchMovies = function(){
 	console.log('I\'m watching movies now...');
@@ -197,11 +201,12 @@ let worker_2 = new Worker2(worker_2Info, person_2Info);
 */
 
 
-function createWraper(){
+function createWraper(fn){
 	return function(){
-		console.log(arguments);
+		console.log(arguments)
+		return fn(...arguments);
 	}
 }
 
-let wraper1 = createWraper();
-wraper1('g',[],123);
+let wraper1 = createWraper((a,b) => a+b);
+console.log(wraper1(2,5));
