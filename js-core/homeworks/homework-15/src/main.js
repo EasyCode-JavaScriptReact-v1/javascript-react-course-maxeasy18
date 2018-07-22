@@ -48,8 +48,8 @@ console.log('0123456789abcdefghijklmnop',solution("0123456789abcdefghijklmnop") 
 //#
 const flatten = arr => {
 	let res = [];
-	function subFlatten(arr){
-		arr.forEach(function(value){
+	let subFlatten = arr => {
+		arr.forEach( value => {
 			if(!Array.isArray(value)){
 				res.push(value);
 			}else{
