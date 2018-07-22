@@ -26,26 +26,16 @@ class PhoneApp{
   }
 
   transformNumber(number) {
-    let _res = '(';
-    let _number = String(number);
-    _res += number.slice(0,3);
-    _res += ') ';
-    _res += number.slice(3,5);
-    _res += '-';
-    _res += number.slice(5,7);
-    _res += '-';
-    _res += number.slice(7,10);
+    let _res = number.replace(/(\d{3})(\d{2})(\d{2})(\d{3})/, '($1) $2-$3-$4');
     return _res;
   }
 
-
-
-  _prepareStringValue(name) {  
+  _cleanStringValue(name) {  
     return name.toLowerCase().trim()
   }
 
   _compareStingValue(valueIn,valueBase) {  
-    return this._prepareStringValue(valueBase) === this._prepareStringValue(valueIn);
+    return this._cleanStringValue(valueBase) === this._cleanStringValue(valueIn);
   }
 
   _compareName(nameIn,nameBase){
@@ -75,12 +65,9 @@ class PhoneApp{
   }
 
   findUser(name) {
-    return this.dataBase.reduce((acc,user) => {
-      if(this._compareName(user.name,name)){
-        acc.push(user);
-      }
-      return acc;
-    },[]);
+    let userWithName = this.filterBy('name',name);
+    let userWithCname = this.filterBy('cname',name);
+    return userWithName.concat(userWithCname);
   }
 
   sortUsersBy(prop) {
@@ -89,8 +76,8 @@ class PhoneApp{
       return false;
     }
     return this.dataBase.sort((a, b) => {
-      const propA = this._prepareStringValue(a[prop]); 
-      const propB = this._prepareStringValue(b[prop]); 
+      const propA = this._cleanStringValue(a[prop]); 
+      const propB = this._cleanStringValue(b[prop]); 
       if (propA < propB) {
         return -1;
       }
@@ -105,23 +92,14 @@ class PhoneApp{
     const toEditUserIndex = this.dataBase.findIndex((user) => {
       return user.id === id;
     });
-    Object.keys(options).forEach((value) => { 
-      this.dataBase[toEditUserIndex][value] = options[value];    
-    })
+    this.dataBase[toEditUserIndex] = { ...this.dataBase[toEditUserIndex], ...options};
   }
 
   filterBy(prop, value) {
-    return this.dataBase.reduce((acc,user) => {
-      if( user[prop].indexOf(value) !== -1){
-        acc.push(user);
-      }
-      return acc;
-    },[]);
+    let letFilerBy = user => user[prop].indexOf(value) !== -1;
+    return this.dataBase.filter(letFilerBy);    
   }
 }
-
-
-
 
 const myApp = new PhoneApp();
 
