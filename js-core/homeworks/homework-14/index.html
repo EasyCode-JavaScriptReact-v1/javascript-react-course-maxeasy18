@@ -25,6 +25,25 @@
 		form > ol > li {
 			margin-bottom: 25px;
 		}
+		form > ol > li > span.status{
+			display: none;
+			font-weight: bold;
+		}
+		form > ol > li > span.status.correct,form > ol > li > span.status.wrong{
+			display: inline;
+		}
+		form > ol > li > span.status.correct{
+			color:green;
+		}
+		form > ol > li > span.status.correct:after{
+			content: 'correct';
+		}
+		form > ol > li > span.status.wrong{
+			color:red;
+		}
+		form > ol > li > span.status.wrong:after{
+			content: 'wrong';
+		}		
 		form > ol > li > ul {
 			margin-top: 15px;
 		}
