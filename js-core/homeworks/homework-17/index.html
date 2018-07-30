@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home work 17</title>
+</head>
+<body>
+
+<style type="text/css">
+	*{
+		padding: 0;
+		margin: 0;
+		box-sizing: border-box;
+	}
+	div.carousel {
+		width: 450px;
+		/*height: 300px;	*/
+		overflow: hidden;
+	}
+	div.carousel ul{
+		list-style: none;
+		position: relative;	
+		left: 0;
+		overflow: hidden;
+	}
+	div.carousel ul li{
+		margin: 15px;
+		width: 450px;		
+		float:left;
+	}
+	div.carousel ul li a{
+		display: block;
+		width: 100%;
+
+	}
+	div.carousel ul li a img{
+		width: 100%;
+	}
+	div.carousel .nav-block{
+		position: relative;
+		height: 30px;
+		text-align: center;
+	}
+	div.carousel .nav-block .navs{
+		position: absolute;
+	}
+	div.carousel .nav-block .navs.prev{
+		top:3px;
+		left:5px;
+	}
+	div.carousel .nav-block .navs.next{
+		top:3px;
+		right:5px;
+	}
+
+</style>
+
+<div class="carousel">
+	<ul>
+		<li><a href="src/space_1.jpg" target="_blank"><img src="src/space_1.jpg" /></a></li>
+		<li><a href="src/space_2.jpg" target="_blank"><img src="src/space_2.jpg" /></a></li>
+		<li><a href="src/space_3.jpg" target="_blank"><img src="src/space_3.jpg" /></a></li>
+		<li><a href="src/space_4.jpg" target="_blank"><img src="src/space_4.jpg" /></a></li>
+		<li><a href="src/space_5.jpg" target="_blank"><img src="src/space_5.jpg" /></a></li>
+	</ul>
+</div>
+
+
+<script src="src/main.js"></script>
+<a href="#" onclick="carousel.slideToPosition(1); return false;">картинка 1</a>
+<a href="#" onclick="carousel.slideToPosition(2); return false;">картинка 2</a>
+<a href="#" onclick="carousel.slideToPosition(3); return false;">картинка 3</a>
+<a href="#" onclick="carousel.slideToPosition(4); return false;">картинка 4</a>
+<a href="#" onclick="carousel.slideToPosition(5); return false;">картинка 5</a>
+</body>
+</html>
