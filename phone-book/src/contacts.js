@@ -1,6 +1,6 @@
 
 
-class PhoneBook {
+class Contacts {
   constructor(containerSelector) {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Contacts';
@@ -61,7 +61,7 @@ class PhoneBook {
   
   _createFooterIcon(iconData){
     return `
-    <a href="${iconData.href}" class="tab">
+    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
         <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
         <span class = "tab-text">${iconData.title}</span>
     </a>`    
@@ -72,7 +72,7 @@ class PhoneBook {
     <footer class="footer">
         <div class="container bottom-radius">
             <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search",})}
+                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search", active: true})}
                 ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th",})}
                 ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil",})}
                 ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user",})}
@@ -90,11 +90,11 @@ class PhoneBook {
     `;
   }
 
-  renderPhoneBook(){  
+  render(){  
     const phoneSource = this.createPhoneSource(); 
     this.container.innerHTML = phoneSource;
   }
 }
 
-const phone = new PhoneBook('.container-holder');
-phone.renderPhoneBook();
+const contacts = new Contacts('.container-holder');
+contacts.render();
