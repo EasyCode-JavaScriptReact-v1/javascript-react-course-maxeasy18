@@ -1,129 +1,10 @@
 
 
 class PhoneBook {
-  constructor(container) {
-    this.listHeads = ['Name','Last name','Email'];
-    this.container = container;
+  constructor(containerSelector) {
+    this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Contacts';
-    this.bottomNavigation = [
-      {
-        href: "index.html",
-        title: "Contacts",
-        icon: "search",
-      }, 
-      {
-        href: "keypad.html",
-        title: "Keypad",
-        icon: "th",
-      }, 
-      {
-        href: "edit-contact.html",
-        title: "Edit contact",
-        icon: "pencil",
-      },
-      {
-        href: "user.html",
-        title: "Add user",
-        icon: "user",
-      } ,      
-      {
-        href: "add-user.html",
-        title: "Add user",
-        icon: "plus",
-      }                     
-    ];
-    this.users = [
-      {
-        name: "Иван",
-        cname: "Петров",
-        email: "IvanPetrov@ec.ua"
-      },
-      {
-        name: "Сергей",
-        cname: "Сергеев",
-        email: "SergeiSergeev@ec.ua"
-      },
-      {
-        name: "Иван",
-        cname: "Иванов",
-        email: "IvanIvanov@ec.ua"
-      },
-      {
-        name: "Александр",
-        cname: "Александров",
-        email: "AlexAlex@ec.ua"
-      },
-      {
-        name: "Алекс",
-        cname: "Смирнов",
-        email: "AlexSmirnov@ec.ua"
-      },
-      {
-        name: "Сергей",
-        cname: "Волков",
-        email: "VolkovSergey@ec.ua"
-      },
-      {
-        name: "Мария",
-        cname: "Шарапова",
-        email: "MariyaSharapova@ec.ua"
-      },
-      {
-        name: "Александр",
-        cname: "Винник",
-        email: "AlexVinnik@ec.ua"
-      },
-      {
-        name: "Дарий",
-        cname: "Смирнов",
-        email: "DariySmirnov@ec.ua"
-      },
-      {
-        name: "Елена",
-        cname: "Лещенко",
-        email: "ElenaLeshenko@ec.ua"
-      },
-      {
-        name: "Ольга",
-        cname: "Новикова",
-        email: "OlgaNovikova@ec.ua"
-      },
-      {
-        name: "Наталья",
-        cname: "Шемякина",
-        email: "ShemyakinaN@ec.ua"
-      },
-      {
-        name: "Анна",
-        cname: "Донцова",
-        email: "AnnaDontsova@ec.ua"
-      },
-      {
-        name: "Влад",
-        cname: "Яма",
-        email: "VladYama@ec.ua"
-      },
-      {
-        name: "Кира",
-        cname: "Воробьева",
-        email: "Kira1990@ec.ua"
-      },
-      {
-        name: "Виктор",
-        cname: "Кривенко",
-        email: "ViktorKriv@ec.ua"
-      }
-    ];
-
-  }
-
-  _makeNode(node,text){
-    const nodeElement = document.createElement(node)
-    if(!text){
-        return nodeElement; 
-    }
-    nodeElement.innerText = text;
-    return nodeElement;
+    this.users = users;
   }
 
   _makeList(){
@@ -172,26 +53,30 @@ class PhoneBook {
                     <input type="text" class="form-control" id= "search" placeholder="Search">
                 </div>
             </form>
+            ${this._makeList()}
         </div>
     </main>
     `;    
   }
   
-  createFooterSource(){
-    const navItems = this.bottomNavigation.map( (value,index) => {
-        return `                
-        <a href="${value.href}" class="tab">
-            <span class="glyphicon glyphicon-${value.icon}" aria-hidden="true"></span>
-            <span class = "tab-text">${value.title}</span>
-        </a>
-        `;
-    }).join('');
+  _createFooterIcon(iconData){
+    return `
+    <a href="${iconData.href}" class="tab">
+        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
+        <span class = "tab-text">${iconData.title}</span>
+    </a>`    
+  }
 
+  createFooterSource(){
     return `
     <footer class="footer">
         <div class="container bottom-radius">
             <nav class="main-nav">
-                ${navItems}
+                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search",})}
+                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th",})}
+                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil",})}
+                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user",})}
+                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus",})}
             </nav>
         </div>
     </footer>
@@ -206,15 +91,10 @@ class PhoneBook {
   }
 
   renderPhoneBook(){  
-
     const phoneSource = this.createPhoneSource(); 
     this.container.innerHTML = phoneSource;
-
-    const listContainer = this.container.querySelector('main > .container')
-    listContainer.innerHTML = this._makeList();
   }
 }
 
-const phoneHolderContainer = document.body.querySelector('body > .container-holder');
-const phone = new PhoneBook(phoneHolderContainer);
+const phone = new PhoneBook('.container-holder');
 phone.renderPhoneBook();
