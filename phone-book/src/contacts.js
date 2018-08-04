@@ -5,10 +5,19 @@ class Contacts {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Contacts';
     this.users = users;
+    this.orderDirection = 'asc';
+    this.container.addEventListener('click', (event) => {
+      if(event.target.nodeName === 'TH'){
+        let sortBy = event.target.getAttribute("data-name");
+        this.users = this.sortUsersBy(sortBy);
+        this.orderDirection = this.orderDirection == 'asc' ? 'desc' : 'asc';
+        this.render();
+      }
+    });
   }
 
-  _makeList(){
-    const listOfUsers = this.users.map( user => {
+  renderListOfUsers(){
+    return this.users.map( user => {
       return `
           <tr>
             <td>${user.name}</td>
@@ -16,22 +25,30 @@ class Contacts {
             <td>${user.email}</td>
           </tr>
       `;
-    }).join('');
+    }).join('');    
+  }
+
+  renderContactsList(){
     return `
       <table class="table table-hover contacts">
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Last name</th>
-            <th>Email</th>
+            <th data-name="name">Name</th>
+            <th data-name="cname">Last name</th>
+            <th data-name="email">Email</th>
           </tr>
         </thead>
       <tbody>
-        ${listOfUsers}
+       
       </tbody>
     </table>
 
     `;    
+  }
+
+  insertListOfUsers(){
+    const containerForList = this.container.querySelector('table > tbody');
+    containerForList.innerHTML = this.renderListOfUsers();
   }
 
   createHeaderSource(){
@@ -43,6 +60,7 @@ class Contacts {
         </header>   
     `;
   }
+
   createMainSource(){
     return `
     <main>
@@ -53,7 +71,7 @@ class Contacts {
                     <input type="text" class="form-control" id= "search" placeholder="Search">
                 </div>
             </form>
-            ${this._makeList()}
+            ${this.renderContactsList()}
         </div>
     </main>
     `;    
@@ -89,10 +107,27 @@ class Contacts {
     ${this.createFooterSource()}    
     `;
   }
-
+  _cleanStringValue(name) {  
+    return name.toLowerCase().trim()
+  }
+  sortUsersBy(prop) {
+    const orderDirection = this.orderDirection == 'asc' ? 1 : -1;
+    return this.users.sort((a, b) => {
+      const propA = this._cleanStringValue(a[prop]); 
+      const propB = this._cleanStringValue(b[prop]); 
+      if (propA < propB) {
+        return -1*orderDirection;
+      }
+      if (propA > propB) {
+        return 1*orderDirection;
+      }
+      return 0;
+    })
+  }
   render(){  
     const phoneSource = this.createPhoneSource(); 
     this.container.innerHTML = phoneSource;
+    this.insertListOfUsers();
   }
 }
 
