@@ -39,13 +39,44 @@ class Keypad {
     if( number && /^[\d\*#]$/.test(number) && this.currentNumber.length < 10){
       this.currentNumber += number;
     }
-    const formatedNumber = this.transformNumber(this.currentNumber);
+    const formatedNumber = this.formatformNumber(this.currentNumber);
     this.container.querySelector('main span.numbers').innerHTML = formatedNumber
   }
 
-  transformNumber(number) {
-    let _res = number.replace(/(\d{3})(\d{2})(\d{2})(\d{3})/, '($1) $2-$3-$4');
-    return _res;
+  formatformNumber(number) {
+    const formatedNumber = number.replace(/(\d{0,3})(\d{0,2})?(\d{0,2})?(\d{0,3})?/, (match,g1,g2,g3,g4) => {
+      let res = ''
+      if(g1){
+        res = `(${g1}`;
+      }
+      if(g1.length === 3){
+        res += `) `;
+      }
+      if(g2){
+        res += `${g2}`;
+      }
+      if(g3){
+        res += `-${g3}`;
+      }
+      if(g4){
+        res += `-${g4}`;
+      }
+      return res
+    });    
+    /*
+    if(number.length > 0){
+      if(number.length < 3){
+        res = `(${number}`;
+      }else if (number.length < 6) {
+        res = number.replace(/(\d{3})(\d{0,2})/, '($1) $2');
+      }else if (number.length < 8) {
+        res = number.replace(/(\d{3})(\d{0,2})(\d{0,2})/, '($1) $2-$3');
+      }else{
+
+      }
+
+    }*/
+    return formatedNumber;
   }
 
   createHeaderSource(){
