@@ -21,13 +21,11 @@ class Contacts {
 
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
-      if(event.target.value === ''){
-        this.users = users;
-      }else{
-        this.users = this.filterBy('name',event.target.value);
+      this.users = users;
+      if(event.target.value !== ''){
+        this.users = this.findUser(event.target.value);
       }
       this.insertListOfUsers();
-      // console.log(event.target.value);
     });    
   }
   renderListOfUsers(){
@@ -139,14 +137,14 @@ class Contacts {
     })
   }
 
-  findUser(name) {
-    const userWithName = this.filterBy('name',name);
-    const userWithCname = this.filterBy('cname',name);
-    return userWithName.concat(userWithCname);
-  }
 
-  filterBy(prop, value) {
+  findUser(value, prop) {
     const letFilterBy = user => {
+      if(!prop){
+        return user["name"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+          user["cname"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+          user["email"].toLowerCase().indexOf(value.toLowerCase()) !== -1;
+      }
       return user[prop].toLowerCase().indexOf(value.toLowerCase()) !== -1;
     }
     return this.users.filter(letFilterBy);    
