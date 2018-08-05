@@ -11,11 +11,25 @@ class Contacts {
         let sortBy = event.target.getAttribute("data-name");
         this.users = this.sortUsersBy(sortBy);
         this.usersOrderDirection = this.usersOrderDirection == 'asc' ? 'desc' : 'asc';
-        this.render();
+        this.insertListOfUsers();
       }
     });
+
+
+
   }
 
+  initSearch(){
+    document.getElementById('search').addEventListener('keyup', (event) => {
+      if(event.target.value === ''){
+        this.users = users;
+      }else{
+        this.users = this.filterBy('name',event.target.value);
+      }
+      this.insertListOfUsers();
+      // console.log(event.target.value);
+    });    
+  }
   renderListOfUsers(){
     return this.users.map( user => {
       return `
@@ -68,7 +82,7 @@ class Contacts {
             <form class="form-inline search-form">
                 <div class="form-group">
                     <label class="sr-only" for="search">Search</label>
-                    <input type="text" class="form-control" id= "search" placeholder="Search">
+                    <input type="text" class="form-control search-input" id= "search" placeholder="Search">
                 </div>
             </form>
             ${this.renderContactsList()}
@@ -124,10 +138,25 @@ class Contacts {
       return 0;
     })
   }
+
+  findUser(name) {
+    const userWithName = this.filterBy('name',name);
+    const userWithCname = this.filterBy('cname',name);
+    return userWithName.concat(userWithCname);
+  }
+
+  filterBy(prop, value) {
+    const letFilterBy = user => {
+      return user[prop].toLowerCase().indexOf(value.toLowerCase()) !== -1;
+    }
+    return this.users.filter(letFilterBy);    
+  }
+
   render(){  
     const phoneSource = this.createPhoneSource(); 
     this.container.innerHTML = phoneSource;
     this.insertListOfUsers();
+    this.initSearch();
   }
 }
 

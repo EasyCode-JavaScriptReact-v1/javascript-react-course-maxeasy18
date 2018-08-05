@@ -44,6 +44,9 @@ class Keypad {
   }
 
   formatformNumber(number) {
+    if(isNaN(number.charAt(0))){
+      return number;
+    }
     const formatedNumber = number.replace(/(\d{0,3})(\d{0,2})?(\d{0,2})?(\d{0,3})?/, (match,g1,g2,g3,g4) => {
       let res = ''
       if(g1){
