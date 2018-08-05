@@ -5,12 +5,12 @@ class Contacts {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Contacts';
     this.users = users;
-    this.orderDirection = 'asc';
+    this.usersOrderDirection = 'asc';
     this.container.addEventListener('click', (event) => {
       if(event.target.nodeName === 'TH'){
         let sortBy = event.target.getAttribute("data-name");
         this.users = this.sortUsersBy(sortBy);
-        this.orderDirection = this.orderDirection == 'asc' ? 'desc' : 'asc';
+        this.usersOrderDirection = this.usersOrderDirection == 'asc' ? 'desc' : 'asc';
         this.render();
       }
     });
@@ -111,15 +111,15 @@ class Contacts {
     return name.toLowerCase().trim()
   }
   sortUsersBy(prop) {
-    const orderDirection = this.orderDirection == 'asc' ? 1 : -1;
+    const usersOrderDirection = this.usersOrderDirection == 'asc' ? 1 : -1;
     return this.users.sort((a, b) => {
       const propA = this._cleanStringValue(a[prop]); 
       const propB = this._cleanStringValue(b[prop]); 
       if (propA < propB) {
-        return -1*orderDirection;
+        return -1*usersOrderDirection;
       }
       if (propA > propB) {
-        return 1*orderDirection;
+        return 1*usersOrderDirection;
       }
       return 0;
     })

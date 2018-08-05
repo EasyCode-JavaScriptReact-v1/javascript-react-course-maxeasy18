@@ -5,33 +5,12 @@ class Keypad {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Keypad';
     this.users = users;
-  }
-
-  _makeList(){
-    const listOfUsers = this.users.map( user => {
-      return `
-          <tr>
-            <td>${user.name}</td>
-            <td>${user.cname}</td>
-            <td>${user.email}</td>
-          </tr>
-      `;
-    }).join('');
-    return `
-      <table class="table table-hover contacts">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Last name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-      <tbody>
-        ${listOfUsers}
-      </tbody>
-    </table>
-
-    `;    
+    this.container.addEventListener('click', (event) => {
+      if(event.target.nodeName === 'BUTTON' && event.target.classList.contains('key')){
+        const number = event.target.innerHTML;
+        this.container.querySelector('main span.numbers').innerHTML = number;
+      }
+    });   
   }
 
   createHeaderSource(){
@@ -43,13 +22,14 @@ class Keypad {
         </header>   
     `;
   }
+
   createMainSource(){
     return `
   <main class="main">
     <div class="container">
       <div class="number">
         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-        <span class ="numbers">(050)5005050</span>
+        <span class="numbers">(050)5005050</span>
         <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
       </div>
       <div class="keypad-holder">
@@ -102,11 +82,6 @@ class Keypad {
     ${this.createFooterSource()}    
     `;
   }
-
-
-
-
-
 
   render(){  
     const phoneSource = this.createPhoneSource(); 
