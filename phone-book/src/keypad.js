@@ -5,12 +5,47 @@ class Keypad {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Keypad';
     this.users = users;
+    this.currentNumber = '';
     this.container.addEventListener('click', (event) => {
-      if(event.target.nodeName === 'BUTTON' && event.target.classList.contains('key')){
-        const number = event.target.innerHTML;
-        this.container.querySelector('main span.numbers').innerHTML = number;
+      this.detectClickedNumber(event);
+    });
+
+    this.container.addEventListener('click', (event) => {
+      if(event.target.nodeName === 'SPAN' && event.target.classList.contains('delete-number')){
+        this.deleteDigitFromNumber();
+      }  
+    });
+    document.addEventListener('keyup', (event) => {
+      this.updateNumbersField(event.key);
+      if(event.keyCode == 8 ){
+        this.deleteDigitFromNumber();
       }
-    });   
+    });
+  }
+
+  deleteDigitFromNumber(){
+    this.currentNumber = this.currentNumber.slice(0,-1);
+    this.updateNumbersField();    
+  }
+
+  detectClickedNumber(event){
+    if(event.target.nodeName === 'BUTTON' && event.target.classList.contains('key')){
+      const number = event.target.innerHTML;
+      this.updateNumbersField(number);
+    }    
+  }
+
+  updateNumbersField(number){
+    if( number && /^[\d\*#]$/.test(number) && this.currentNumber.length < 10){
+      this.currentNumber += number;
+    }
+    const formatedNumber = this.transformNumber(this.currentNumber);
+    this.container.querySelector('main span.numbers').innerHTML = formatedNumber
+  }
+
+  transformNumber(number) {
+    let _res = number.replace(/(\d{3})(\d{2})(\d{2})(\d{3})/, '($1) $2-$3-$4');
+    return _res;
   }
 
   createHeaderSource(){
@@ -30,7 +65,7 @@ class Keypad {
       <div class="number">
         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
         <span class="numbers">(050)5005050</span>
-        <span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span>
+        <span class="glyphicon glyphicon-circle-arrow-left delete-number" aria-hidden="true"></span>
       </div>
       <div class="keypad-holder">
         <button class="key">1</button>
