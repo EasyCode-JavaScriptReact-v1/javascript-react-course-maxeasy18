@@ -5,8 +5,19 @@ class EditContact {
     this.container = document.body.querySelector(containerSelector);
     this.pageName = 'Edit Contact';
     this.users = users;
-  }
 
+  }
+  prepareEditableFields(){
+    const editButtons = this.container.querySelectorAll('a.add-btn');
+    editButtons.forEach(( value ) => {
+      value.children[1].contentEditable = 'true';
+    });
+    this.container.addEventListener('click', (event) => {
+      if( event.target.nodeName == 'A' && event.target.classList.contains('add-btn')){
+        event.target.children[1].backgroundColor = 'purple';
+      }
+    });    
+  }
   createHeaderSource(){
     return `
         <header class="header">
@@ -25,62 +36,62 @@ class EditContact {
         <div class="edit-foto"><img src="images/user-face-mini.png" alt="#" class=" user-img img-circle center-block"></div>
         <div class="main-info-holder">
           <div class="edit-field">
-            <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
               <span>First Name</span>
-            </button>
+            </a>
           </div>
           <div class="edit-field">
-            <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
               <span>Last Name</span>
-            </button>
+            </a>
           </div>
           <div class="edit-field">
-            <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
               <span>Company</span>
-            </button>
+            </a>
           </div>
         </div>
       </div>
       <div class="scroll-holder">
         <div class="edit-info">
           <div class="edit-field">
-            <button href="#" class="delete-btn"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+            <a href="#" class="delete-btn"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
               <span>phone</span>
               <span>+38 (063) 733 44 55</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add  home phone</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add email</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add address</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add birthday</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add social profile</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+              <a href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add field</span>
-              </button>
+              </a>
             </div>
             <div class="edit-field">
-              <button href="#" class="delete-contact">delete contact</button>
+              <a href="#" class="delete-contact">delete contact</a>
             </div>
           </div>
         </div>
@@ -123,6 +134,7 @@ class EditContact {
   render(){  
     const phoneSource = this.createPhoneSource(); 
     this.container.innerHTML = phoneSource;
+    this.prepareEditableFields();
   }
 }
 

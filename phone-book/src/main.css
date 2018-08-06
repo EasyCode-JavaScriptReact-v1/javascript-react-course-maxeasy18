@@ -321,8 +321,17 @@ h3 {
   margin-right: 10px;
 }
 
+.add-btn span:last-child{
+  display: inline-block;
+  padding: 2px 3px;
+}
+
 .add-btn:hover, .add-btn:focus, .add-btn:active {
   color: #348f3c;
+}
+
+.add-btn span:focus{
+  background-color: black;
 }
 
 .delete-contact {
