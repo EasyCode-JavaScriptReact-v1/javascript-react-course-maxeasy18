@@ -1,36 +1,23 @@
-
-
 class EditContact {
-  constructor(containerSelector) {
-    this.container = document.body.querySelector(containerSelector);
-    this.pageName = 'Edit Contact';
-    this.users = users;
-
+  constructor(appContainer) {
+    this.appContainer = appContainer;
   }
-  prepareEditableFields(){
-    const editButtons = this.container.querySelectorAll('a.add-btn');
+
+  initEvents(){
+    const editButtons = this.appContainer.querySelectorAll('a.add-btn');
     editButtons.forEach(( value ) => {
       value.children[1].contentEditable = 'true';
     });
-    this.container.addEventListener('click', (event) => {
+    this.appContainer.addEventListener('click', (event) => {
+      event.preventDefault();
       if( event.target.nodeName == 'A' && event.target.classList.contains('add-btn')){
         event.target.children[1].backgroundColor = 'purple';
       }
     });    
   }
-  createHeaderSource(){
-    return `
-        <header class="header">
-            <div class="container top-radius">
-                <h2>${this.pageName}</h2>
-            </div>
-        </header>   
-    `;
-  }
 
-  createMainSource(){
+  render(){
     return `
-  <main class="main">
     <div class="container">
       <div class="edit-main-info">
         <div class="edit-foto"><img src="images/user-face-mini.png" alt="#" class=" user-img img-circle center-block"></div>
@@ -96,47 +83,7 @@ class EditContact {
           </div>
         </div>
       </div>
-    </main>
     `;    
   }
   
-  _createFooterIcon(iconData){
-    return `
-    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
-        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
-        <span class = "tab-text">${iconData.title}</span>
-    </a>`    
-  }
-
-  createFooterSource(){
-    return `
-    <footer class="footer">
-        <div class="container bottom-radius">
-            <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search"})}
-                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th"})}
-                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil", active: true})}
-                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user"})}
-                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus"})}
-            </nav>
-        </div>
-    </footer>
-    `;    
-  }
-  createPhoneSource(){
-    return `
-    ${this.createHeaderSource()}
-    ${this.createMainSource()}
-    ${this.createFooterSource()}    
-    `;
-  }
-
-  render(){  
-    const phoneSource = this.createPhoneSource(); 
-    this.container.innerHTML = phoneSource;
-    this.prepareEditableFields();
-  }
 }
-
-const editContact = new EditContact('.container-holder');
-editContact.render();
