@@ -1,37 +1,53 @@
 class App {
   constructor(appContainerId) {
-    this.state = {}
+    this.state = {};
     this.appContainer = document.getElementById(appContainerId);
+    this.router = new Router(this);
     this.pages = {
-      contacts : new Contacts(this.appContainer),
+      contacts : new Contacts(this),
       keypad : new Keypad(this.appContainer),
       editContact : new EditContact(this.appContainer),
       user : new User(this.appContainer),
       addUser : new AddUser(this.appContainer),
     }
-    
-    this.state.pageName = 'Contacts'
-    this.state.activePage = "contacts";
 
     const appHtml = this.renderAppContainer();
     this.appContainer.innerHTML = appHtml;
+    this.addRouterToFooter();
 
-    this.router = new Router(this);
-    
-    // this.currentPage = this.pages.contacts;
-    // this.initRouter();
-    // this.changePageTo(this.activePage);
+    this.state.pageName = 'Contacts';
+    this.router.gotToPage('contacts','/index.html');
+    this.changePageTo('contacts');
+  }
 
+  addRouterToFooter(){
+    const tabs = this.appContainer.querySelector("nav.main-nav");
+    tabs.addEventListener('click', (event) => {
+      event.preventDefault();
+      const container = event.currentTarget;
+      let target = event.target;
+      while (target != container) {
+        if (target.nodeName == 'A' && target.classList.contains('tab') ) {
+          const href = target.href;
+          const newPage = target.getAttribute("data-page");
+          this.router.gotToPage(newPage,href);
+          this.changePageTo(newPage);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });  
   }
 
   changePageTo(newPageName){
-    this.currentPage = this.pages[newPageName];
+    this.state.activePage = newPageName;
+    this.state.currentPage = this.pages[newPageName];    
     this.insertCurrentPage();
     this.initPageEventListeners();
   }
 
   initPageEventListeners(){
-      this.currentPage.initEvents();
+      this.state.currentPage.initEvents();
   }
   
   renderAppContainer(){
@@ -72,7 +88,6 @@ class App {
     <main>
     </main>
     `;                
-            // ${this.renderCurrentPage()}
   }
 
   insertCurrentPage(){
@@ -80,8 +95,9 @@ class App {
     placeForPage.innerHTML = this.renderCurrentPage();
   }
 
-  renderCurrentPage(){    
-    return this.currentPage.render();
+  renderCurrentPage(){
+    const currentPage = this.state.currentPage;
+    return currentPage.render();
   }
 
   _createFooterIcon(iconData){
@@ -90,43 +106,6 @@ class App {
         <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
         <span class = "tab-text">${iconData.title}</span>
     </a>`    
-  }
-
-  initializeRouter() {
-    /*
-    * 1) Если обновлять контент внутри тэга
-    * 2)
-    *
-    * */
-    mountNode.innerHTML = `
-        <main>
-         <div id="app"></div>
-         <footer>
-            <a>contacts</a>
-            <a>edit</a>
-            <a>keypad</a>
-          </footer>
-        </main>
-    `;
-    this.initializeRouterHandlers();
-    this.appDOMNode = mountNode.getElementById('app');
-  }
-
-  renderNewPage() {
-    this.appDOMNode.innerHTML = this.pages[activePage].render();
-  }
-
-  updateView() {
-    this.pages[activePage].updateState(this.state);
-  }
-
-  render() {
-    const {
-      activePage,
-    } = this.state;
-
-    this.updateView();
-    this.pages[activePage].render();
   }
 }
 const app = new App('app');

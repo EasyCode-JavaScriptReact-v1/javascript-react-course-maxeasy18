@@ -1,9 +1,10 @@
 class Contacts {
-  constructor(appContainer) {
+  constructor(app) {
+    this.app = app;
+    this.appContainer = app.appContainer;
     this.pageName = 'Contacts';
     this.users = [];
     this.usersOrderDirection = 'asc';    
-    this.appContainer = appContainer;
   }
 
   initEvents(){
@@ -25,7 +26,7 @@ class Contacts {
     const fetcher = new Fetcher();
     promisWithUsers.push(fetcher.getUser(id));
     Promise.all(promisWithUsers).then( (user) => {
-      console.log(user);
+      
     });
   }
 
@@ -36,7 +37,9 @@ class Contacts {
       while (target != container) {
         if (target.nodeName == 'TR') {
           const id = target.getAttribute("data-user_id");
-          this.showUserPage(id);
+          // this.showUserPage(id);
+          // this.app.router.setHref('user', '/user.html');
+          console.log(id);
           return;
         }
         target = target.parentNode;
