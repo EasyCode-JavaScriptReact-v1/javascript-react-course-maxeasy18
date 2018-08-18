@@ -17,8 +17,33 @@ class Contacts {
     }); 
     this.initSearch(); 
     this.getListOfUsers();  
+    this.initClickOnUser()
   }
 
+  showUserPage(id){
+    let promisWithUsers = [];
+    const fetcher = new Fetcher();
+    promisWithUsers.push(fetcher.getUser(id));
+    Promise.all(promisWithUsers).then( (user) => {
+      console.log(user);
+    });
+  }
+
+  initClickOnUser(){
+    this.appContainer.querySelector("main > div.container").addEventListener('click', event => {
+      const container = event.currentTarget;
+      let target = event.target;
+      while (target != container) {
+        if (target.nodeName == 'TR') {
+          const id = target.getAttribute("data-user_id");
+          this.showUserPage(id);
+          return;
+        }
+        target = target.parentNode;
+      }
+    });     
+
+  }
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
       if(event.target.value !== ''){
@@ -45,8 +70,9 @@ class Contacts {
     return this.users.map( user => {
       const name = user.fullName.split(' ')[0];
       const cname = user.fullName.split(' ')[1] || '';
+      const id = user._id;
       return `
-          <tr>
+          <tr data-user_id="${id}">
             <td>${name}</td>
             <td>${cname}</td>
             <td>${user.email}</td>

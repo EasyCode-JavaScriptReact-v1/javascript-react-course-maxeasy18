@@ -1,6 +1,6 @@
 class App {
   constructor(appContainerId) {
-    this.pageName = 'Contacts';
+    this.state = {}
     this.appContainer = document.getElementById(appContainerId);
     this.pages = {
       contacts : new Contacts(this.appContainer),
@@ -9,13 +9,18 @@ class App {
       user : new User(this.appContainer),
       addUser : new AddUser(this.appContainer),
     }
-    this.activePage = "contacts";
+    
+    this.state.pageName = 'Contacts'
+    this.state.activePage = "contacts";
 
     const appHtml = this.renderAppContainer();
     this.appContainer.innerHTML = appHtml;
-    this.currentPage = this.pages.contacts;
-    this.initRouter();
-    this.changePageTo(this.activePage);
+
+    this.router = new Router(this);
+    
+    // this.currentPage = this.pages.contacts;
+    // this.initRouter();
+    // this.changePageTo(this.activePage);
 
   }
 
@@ -28,22 +33,7 @@ class App {
   initPageEventListeners(){
       this.currentPage.initEvents();
   }
-  initRouter(){
-    window.history.pushState({currentPage:this.activePage},'', '/index.html');
-    const tabs = this.appContainer.querySelectorAll("a.tab");
-    tabs.forEach( link => {
-      const href = link.href;
-      link.addEventListener('click', (event) =>{
-        event.preventDefault();
-        this.activePage = event.currentTarget.getAttribute("data-page");
-        this.changePageTo(this.activePage);
-        window.history.pushState({currentPage:this.activePage},'', href);
-      });
-    });
-    window.addEventListener('popstate', event => {
-      this.changePageTo(event.state.currentPage);
-    });
-  }
+  
   renderAppContainer(){
     return `
     ${this.renderAppHead()}
