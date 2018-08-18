@@ -1,25 +1,16 @@
 
 
 class AddUser {
-  constructor(containerSelector) {
-    this.container = document.body.querySelector(containerSelector);
-    this.pageName = 'Keypad';
-    this.users = users;
+  constructor(appContainer) {
+    this.appContainer = appContainer;
   }
 
-  createHeaderSource(){
-    return `
-        <header class="header">
-            <div class="container top-radius">
-                <h2>${this.pageName}</h2>
-            </div>
-        </header>   
-    `;
+  initEvents(){
+    
   }
 
-  createMainSource(){
+  render(){
     return `
-  <main class="main">
     <div class="container">
       <div class="edit-main-info">
         <div class="edit-foto">
@@ -87,46 +78,6 @@ class AddUser {
           </div>
         </div>
       </div>
-    </main>
     `;    
-  }
-  
-  _createFooterIcon(iconData){
-    return `
-    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
-        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
-        <span class = "tab-text">${iconData.title}</span>
-    </a>`    
-  }
-
-  createFooterSource(){
-    return `
-    <footer class="footer">
-        <div class="container bottom-radius">
-            <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search"})}
-                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th"})}
-                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil"})}
-                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user"})}
-                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus", active: true})}
-            </nav>
-        </div>
-    </footer>
-    `;    
-  }
-  createPhoneSource(){
-    return `
-    ${this.createHeaderSource()}
-    ${this.createMainSource()}
-    ${this.createFooterSource()}    
-    `;
-  }
-
-  render(){  
-    const phoneSource = this.createPhoneSource(); 
-    this.container.innerHTML = phoneSource;
   }
 }
-
-const addUser = new AddUser('.container-holder');
-addUser.render();

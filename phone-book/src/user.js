@@ -1,25 +1,16 @@
 
 
 class User {
-  constructor(containerSelector) {
-    this.container = document.body.querySelector(containerSelector);
-    this.pageName = 'Keypad';
-    this.users = users;
+  constructor(appContainer) {
+    this.appContainer = appContainer;
   }
 
-  createHeaderSource(){
-    return `
-        <header class="header">
-            <div class="container top-radius">
-                <h2>${this.pageName}</h2>
-            </div>
-        </header>   
-    `;
-  }
+  initEvents(){
 
-  createMainSource(){
+  }
+  
+  render(){
     return `
-    <main class="main">
       <div class="container">
         <img src="images/user-face.png" alt="#" class=" user-img img-circle center-block">
         <div class="user-name">User Name</div>
@@ -58,46 +49,6 @@ class User {
           <div class ="options-item"><a href="#">Block this caller</a></div>
         </div>
       </div>
-    </main>
     `;    
-  }
-  
-  _createFooterIcon(iconData){
-    return `
-    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
-        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
-        <span class = "tab-text">${iconData.title}</span>
-    </a>`    
-  }
-
-  createFooterSource(){
-    return `
-    <footer class="footer">
-        <div class="container bottom-radius">
-            <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search"})}
-                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th"})}
-                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil"})}
-                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user", active: true})}
-                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus"})}
-            </nav>
-        </div>
-    </footer>
-    `;    
-  }
-  createPhoneSource(){
-    return `
-    ${this.createHeaderSource()}
-    ${this.createMainSource()}
-    ${this.createFooterSource()}    
-    `;
-  }
-
-  render(){  
-    const phoneSource = this.createPhoneSource(); 
-    this.container.innerHTML = phoneSource;
   }
 }
-
-const user = new User('.container-holder');
-user.render();

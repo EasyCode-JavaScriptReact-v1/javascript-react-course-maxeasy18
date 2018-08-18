@@ -1,39 +1,54 @@
-
-
 class Contacts {
-  constructor(containerSelector) {
-    this.container = document.body.querySelector(containerSelector);
+  constructor(appContainer) {
     this.pageName = 'Contacts';
-    this.users = users;
-    this.usersOrderDirection = 'asc';
-    this.container.addEventListener('click', (event) => {
+    this.users = [];
+    this.usersOrderDirection = 'asc';    
+    this.appContainer = appContainer;
+  }
+
+  initEvents(){
+    this.appContainer.querySelector("main > div.container").addEventListener('click', (event) => {
       if(event.target.nodeName === 'TH'){
         let sortBy = event.target.getAttribute("data-name");
         this.users = this.sortUsersBy(sortBy);
         this.usersOrderDirection = this.usersOrderDirection == 'asc' ? 'desc' : 'asc';
-        this.insertListOfUsers();
+        this.updateListOfUsers();
       }
-    });
-
-
-
+    }); 
+    this.initSearch(); 
+    this.getListOfUsers();  
   }
 
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
-      this.users = users;
       if(event.target.value !== ''){
         this.users = this.findUser(event.target.value);
       }
-      this.insertListOfUsers();
+      this.updateListOfUsers();
     });    
+  }
+
+  getListOfUsers(){
+    if(this.users.length != 0){
+      return false;
+    }
+    let promisWithUsers = [];
+    const fetcher = new Fetcher();
+    promisWithUsers.push(fetcher.getUsers());
+    Promise.all(promisWithUsers).then( (users) => {
+      this.users = users[0];
+      this.updateListOfUsers();
+    });
+    // return users;
   }
   renderListOfUsers(){
     return this.users.map( user => {
+      const name = user.fullName.split(' ')[0];
+      const cname = user.fullName.split(' ')[1] || '';
       return `
           <tr>
-            <td>${user.name}</td>
-            <td>${user.cname}</td>
+            <td>${name}</td>
+            <td>${cname}</td>
             <td>${user.email}</td>
           </tr>
       `;
@@ -45,88 +60,49 @@ class Contacts {
       <table class="table table-hover contacts">
         <thead>
           <tr>
-            <th data-name="name">Name</th>
-            <th data-name="cname">Last name</th>
+            <th data-name="fullName">Name</th>
+            <th data-name="fullName">Last name</th>
             <th data-name="email">Email</th>
           </tr>
         </thead>
       <tbody>
-       
+       ${this.renderListOfUsers()}
       </tbody>
     </table>
 
     `;    
   }
 
-  insertListOfUsers(){
-    const containerForList = this.container.querySelector('table > tbody');
+  updateListOfUsers(){
+    const containerForList = this.appContainer.querySelector('table > tbody');
     containerForList.innerHTML = this.renderListOfUsers();
-  }
-
-  createHeaderSource(){
-    return `
-        <header class="header">
-            <div class="container top-radius">
-                <h2>${this.pageName}</h2>
-            </div>
-        </header>   
-    `;
   }
 
   createMainSource(){
     return `
-    <main>
-        <div class="container">
-            <form class="form-inline search-form">
-                <div class="form-group">
-                    <label class="sr-only" for="search">Search</label>
-                    <input type="text" class="form-control search-input" id= "search" placeholder="Search">
-                </div>
-            </form>
-            ${this.renderContactsList()}
-        </div>
-    </main>
+      <div class="container">
+        <form class="form-inline search-form">
+            <div class="form-group">
+                <label class="sr-only" for="search">Search</label>
+                <input type="text" class="form-control search-input" id= "search" placeholder="Search">
+            </div>
+        </form>
+        ${this.renderContactsList()}
+      </div>
     `;    
   }
   
-  _createFooterIcon(iconData){
-    return `
-    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
-        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
-        <span class = "tab-text">${iconData.title}</span>
-    </a>`    
-  }
-
-  createFooterSource(){
-    return `
-    <footer class="footer">
-        <div class="container bottom-radius">
-            <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search", active: true})}
-                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th",})}
-                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil",})}
-                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user",})}
-                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus",})}
-            </nav>
-        </div>
-    </footer>
-    `;    
-  }
-  createPhoneSource(){
-    return `
-    ${this.createHeaderSource()}
-    ${this.createMainSource()}
-    ${this.createFooterSource()}    
-    `;
-  }
-  _cleanStringValue(name) {  
+ 
+  
+  cleanStringValue(name) {  
     return name.toLowerCase().trim()
   }
+
   sortUsersBy(prop) {
     const usersOrderDirection = this.usersOrderDirection == 'asc' ? 1 : -1;
     return this.users.sort((a, b) => {
-      const propA = this._cleanStringValue(a[prop]); 
-      const propB = this._cleanStringValue(b[prop]); 
+      const propA = this.cleanStringValue(a[prop]); 
+      const propB = this.cleanStringValue(b[prop]); 
       if (propA < propB) {
         return -1*usersOrderDirection;
       }
@@ -137,12 +113,12 @@ class Contacts {
     })
   }
 
-
   findUser(value, prop) {
     const letFilterBy = user => {
       if(!prop){
-        return user["name"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
-          user["cname"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+        console.log(user);
+        return user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
+          user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
           user["email"].toLowerCase().indexOf(value.toLowerCase()) !== -1;
       }
       return user[prop].toLowerCase().indexOf(value.toLowerCase()) !== -1;
@@ -151,12 +127,9 @@ class Contacts {
   }
 
   render(){  
-    const phoneSource = this.createPhoneSource(); 
-    this.container.innerHTML = phoneSource;
-    this.insertListOfUsers();
-    this.initSearch();
+    return `
+      ${this.createMainSource()}
+    `
   }
 }
 
-const contacts = new Contacts('.container-holder');
-contacts.render();
