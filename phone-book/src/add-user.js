@@ -2,6 +2,7 @@
 
 class AddUser {
   constructor(appContainer) {
+    this.title = 'Add User'
     this.appContainer = appContainer;
   }
 

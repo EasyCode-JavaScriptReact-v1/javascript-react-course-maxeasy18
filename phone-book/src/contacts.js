@@ -1,6 +1,7 @@
 class Contacts {
   constructor(app) {
     this.app = app;
+    this.title = "Contacts";
     this.appContainer = app.appContainer;
     this.pageName = 'Contacts';
     this.users = [];

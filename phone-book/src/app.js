@@ -22,8 +22,10 @@ class App {
   }
 
   updateState(newState){
+    this.state = {};
     Object.assign(this.state,newState);
   }
+
   addRouterToFooter(){
     const tabs = this.appContainer.querySelector("nav.main-nav");
     tabs.addEventListener('click', (event) => {
@@ -45,13 +47,24 @@ class App {
   }
 
   changePageToActive(){
+    this.updateTitle();
     this.insertCurrentPage();
     this.initPageEventListeners();
   }
+  updateTitle(){    
+    const currentPage = this.getCurrentPage(); 
+    const title = this.appContainer.querySelector('header > div > h2');
+    title.textContent = currentPage.title;
+  }
+
+  getCurrentPage(){
+    const activePage = this.state.activePage;
+    const currentPage = this.pages[activePage];  
+    return currentPage;  
+  }
 
   initPageEventListeners(){
-    const activePage = this.state.activePage;
-    const currentPage = this.pages[activePage];    
+    const currentPage = this.getCurrentPage(); 
     currentPage.initEvents();
   }
   
@@ -67,7 +80,7 @@ class App {
     return `
         <header class="header">
             <div class="container top-radius">
-                <h2>${this.pageName}</h2>
+                <h2></h2>
             </div>
         </header>   
     `;
@@ -101,8 +114,7 @@ class App {
   }
 
   renderCurrentPage(){
-    const activePage = this.state.activePage;
-    const currentPage = this.pages[activePage];
+    const currentPage = this.getCurrentPage(); 
     return currentPage.render();
   }
 

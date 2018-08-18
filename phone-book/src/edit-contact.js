@@ -1,5 +1,6 @@
 class EditContact {
   constructor(appContainer) {
+    this.title = 'Edit Contact';
     this.appContainer = appContainer;
   }
 

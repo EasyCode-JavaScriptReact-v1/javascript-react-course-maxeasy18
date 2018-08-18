@@ -1,5 +1,6 @@
 class Keypad {
   constructor(appContainer) {
+    this.title = "Keypad";    
     this.currentNumber = '';
     this.appContainer = appContainer;
   }
