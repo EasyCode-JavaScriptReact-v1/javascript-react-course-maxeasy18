@@ -1,6 +1,6 @@
 class Fetcher{
   constructor(){
-    this.url = 'http://easycode-js.herokuapp.com/mamax'
+    this.url = 'https://easycode-js.herokuapp.com/mamax'
   }
   getUsers(){
     return fetch(this.url)
