@@ -16,10 +16,14 @@ class App {
     this.addRouterToFooter();
 
     this.state.pageName = 'Contacts';
-    this.router.gotToPage('contacts','/index.html');
-    this.changePageTo('contacts');
+    this.updateState({activePage : 'contacts'});
+    this.router.gotToPage({activePage : 'contacts'},'/index.html');
+    this.changePageToActive();
   }
 
+  updateState(newState){
+    Object.assign(this.state,newState);
+  }
   addRouterToFooter(){
     const tabs = this.appContainer.querySelector("nav.main-nav");
     tabs.addEventListener('click', (event) => {
@@ -30,8 +34,9 @@ class App {
         if (target.nodeName == 'A' && target.classList.contains('tab') ) {
           const href = target.href;
           const newPage = target.getAttribute("data-page");
-          this.router.gotToPage(newPage,href);
-          this.changePageTo(newPage);
+          this.updateState({activePage : newPage});          
+          this.router.gotToPage({activePage : newPage},href);
+          this.changePageToActive();
           return;
         }
         target = target.parentNode;
@@ -39,15 +44,15 @@ class App {
     });  
   }
 
-  changePageTo(newPageName){
-    this.state.activePage = newPageName;
-    this.state.currentPage = this.pages[newPageName];    
+  changePageToActive(){
     this.insertCurrentPage();
     this.initPageEventListeners();
   }
 
   initPageEventListeners(){
-      this.state.currentPage.initEvents();
+    const activePage = this.state.activePage;
+    const currentPage = this.pages[activePage];    
+    currentPage.initEvents();
   }
   
   renderAppContainer(){
@@ -96,7 +101,8 @@ class App {
   }
 
   renderCurrentPage(){
-    const currentPage = this.state.currentPage;
+    const activePage = this.state.activePage;
+    const currentPage = this.pages[activePage];
     return currentPage.render();
   }
 

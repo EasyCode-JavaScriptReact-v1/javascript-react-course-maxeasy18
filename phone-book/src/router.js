@@ -3,12 +3,13 @@ class Router {
  
     window.addEventListener('popstate', event => {
       // console.log(event.state);
-      app.changePageTo(event.state.activePage);
+      app.updateState({activePage : event.state.activePage});
+      app.changePageToActive();
     });
   }
 
-  gotToPage(activePage,href){
-    window.history.pushState({activePage:activePage},'', href);
+  gotToPage(state,href){
+    window.history.pushState(state,'', href);
   }
 
 }

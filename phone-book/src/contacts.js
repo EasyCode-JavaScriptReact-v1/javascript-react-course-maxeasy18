@@ -13,11 +13,11 @@ class Contacts {
         let sortBy = event.target.getAttribute("data-name");
         this.users = this.sortUsersBy(sortBy);
         this.usersOrderDirection = this.usersOrderDirection == 'asc' ? 'desc' : 'asc';
-        this.updateListOfUsers();
+        this.insertListOfUsersToApp(this.users);
       }
     }); 
-    this.initSearch(); 
     this.getListOfUsers();  
+    this.initSearch(); 
     this.initClickOnUser()
   }
 
@@ -35,11 +35,11 @@ class Contacts {
       const container = event.currentTarget;
       let target = event.target;
       while (target != container) {
-        if (target.nodeName == 'TR') {
+        if (target.nodeName == 'TR' && target.parentNode.nodeName == 'TBODY') {
           const id = target.getAttribute("data-user_id");
-          // this.showUserPage(id);
-          // this.app.router.setHref('user', '/user.html');
-          console.log(id);
+          this.app.updateState({activePage : 'user', userId : id });
+          this.app.router.gotToPage({activePage : 'user', userId : id },'/user.html');
+          this.app.changePageToActive();          
           return;
         }
         target = target.parentNode;
@@ -49,10 +49,11 @@ class Contacts {
   }
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
+      let filteredUsers = this.users;
       if(event.target.value !== ''){
-        this.users = this.findUser(event.target.value);
+        filteredUsers = this.findUser(event.target.value);
       }
-      this.updateListOfUsers();
+      this.insertListOfUsersToApp(filteredUsers);
     });    
   }
 
@@ -65,12 +66,12 @@ class Contacts {
     promisWithUsers.push(fetcher.getUsers());
     Promise.all(promisWithUsers).then( (users) => {
       this.users = users[0];
-      this.updateListOfUsers();
+      this.insertListOfUsersToApp(this.users);
     });
     // return users;
   }
-  renderListOfUsers(){
-    return this.users.map( user => {
+  renderListOfUsers(listOfUsers){
+    return listOfUsers.map( user => {
       const name = user.fullName.split(' ')[0];
       const cname = user.fullName.split(' ')[1] || '';
       const id = user._id;
@@ -95,16 +96,16 @@ class Contacts {
           </tr>
         </thead>
       <tbody>
-       ${this.renderListOfUsers()}
+       ${this.renderListOfUsers(this.users)}
       </tbody>
     </table>
 
     `;    
   }
 
-  updateListOfUsers(){
+  insertListOfUsersToApp(listOfUsers){
     const containerForList = this.appContainer.querySelector('table > tbody');
-    containerForList.innerHTML = this.renderListOfUsers();
+    containerForList.innerHTML = this.renderListOfUsers(listOfUsers);
   }
 
   createMainSource(){
@@ -145,7 +146,6 @@ class Contacts {
   findUser(value, prop) {
     const letFilterBy = user => {
       if(!prop){
-        console.log(user);
         return user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
           user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
           user["email"].toLowerCase().indexOf(value.toLowerCase()) !== -1;
