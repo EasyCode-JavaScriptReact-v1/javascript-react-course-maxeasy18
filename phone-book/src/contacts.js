@@ -62,15 +62,20 @@ class Contacts {
     if(this.users.length != 0){
       return false;
     }
-    let promisWithUsers = [];
-    const fetcher = new Fetcher();
-    promisWithUsers.push(fetcher.getUsers());
-    Promise.all(promisWithUsers).then( (users) => {
-      this.users = users[0];
-      this.insertListOfUsersToApp(this.users);
+    const serverAPI = this.app.serverAPI;
+    const loadingUsers = serverAPI.getUsers();
+    loadingUsers.then( response => {
+      return response.json();
+    })
+    .then(users => {
+      this.users = users
+      this.insertListOfUsersToApp(this.users);        
+    })
+    .catch( err => {
+      console.error(err.message);
     });
-    // return users;
   }
+  
   renderListOfUsers(listOfUsers){
     return listOfUsers.map( user => {
       const name = user.fullName.split(' ')[0];

@@ -3,11 +3,12 @@ class App {
     this.state = {};
     this.appContainer = document.getElementById(appContainerId);
     this.router = new Router(this);
+    this.serverAPI = new ServerAPI();
     this.pages = {
       contacts : new Contacts(this),
       keypad : new Keypad(this.appContainer),
       editContact : new EditContact(this.appContainer),
-      user : new User(this.appContainer),
+      user : new User(this),
       addUser : new AddUser(this.appContainer),
     }
 

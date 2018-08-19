@@ -1,15 +1,60 @@
 
 
 class User {
-  constructor(appContainer) {
+  constructor(app) {
     this.title = "User";
-    this.appContainer = appContainer;
+    this.appContainer = app.appContainer;
+    this.app = app;
   }
 
   initEvents(){
 
+    this.getUser();  
+
   }
   
+  getUser(){
+
+    if(this.user){
+      return false;
+    }
+    const serverAPI = this.app.serverAPI;
+    const userId = this.app.state.userId;
+    const loadingUser = serverAPI.getUser(userId);
+    loadingUser.then( response => {
+      return response.json();
+    })
+    .then(user => {
+      this.user = user
+      this.fillPageWithUsersData();
+    })
+    .catch( err => {
+      console.error(err.message);
+    });
+
+  }
+
+  fillPageWithUsersData(){
+    this.updateName();
+    this.updateEmail();
+    this.updatePhone();
+  }
+
+  updateName(){
+    const nameNode = this.app.appContainer.querySelector('div.user-name');
+    nameNode.textContent = this.user.fullName
+
+  }
+
+  updatePhone(){
+    const phoneNode = this.app.appContainer.querySelector('div.tel-number > div');
+    phoneNode.textContent = this.user.phone;    
+  } 
+
+  updateEmail(){
+
+  }
+
   render(){
     return `
       <div class="container">
