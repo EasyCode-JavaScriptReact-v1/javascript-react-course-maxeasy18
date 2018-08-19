@@ -1,26 +1,29 @@
-
-
 class Keypad {
-  constructor(containerSelector) {
-    this.container = document.body.querySelector(containerSelector);
-    this.pageName = 'Keypad';
-    this.users = users;
+  constructor(app) {
+    this.title = "Keypad";    
     this.currentNumber = '';
-    this.container.addEventListener('click', (event) => {
-      this.detectClickedNumber(event);
-    });
+    this.app = app;
+    this.appContainer = app.appContainer;
+  }
 
-    this.container.addEventListener('click', (event) => {
+  initEvents(){
+    this.appContainer.querySelector("main > div.container").addEventListener('click', (event) => {
+      this.detectClickedNumber(event);
+    }); 
+
+    this.appContainer.querySelector("main > div.container").addEventListener('click', (event) => {
       if(event.target.nodeName === 'SPAN' && event.target.classList.contains('delete-number')){
         this.deleteDigitFromNumber();
       }  
     });
-    document.addEventListener('keyup', (event) => {
+
+    document.addEventListener('keydown', (event) => {
       this.updateNumbersField(event.key);
       if(event.keyCode == 8 ){
         this.deleteDigitFromNumber();
       }
-    });
+    });    
+
   }
 
   deleteDigitFromNumber(){
@@ -39,62 +42,16 @@ class Keypad {
     if( number && /^[\d\*#]$/.test(number) && this.currentNumber.length < 10){
       this.currentNumber += number;
     }
-    const formatedNumber = this.formatformNumber(this.currentNumber);
-    this.container.querySelector('main span.numbers').innerHTML = formatedNumber
+    const formatedNumber = this.app.formatformNumber(this.currentNumber);
+    this.appContainer.querySelector('main span.numbers').innerHTML = formatedNumber
   }
 
-  formatformNumber(number) {
-    if(isNaN(number.charAt(0))){
-      return number;
-    }
-    const formatedNumber = number.replace(/(\d{0,3})(\d{0,2})?(\d{0,2})?(\d{0,3})?/, (match,g1,g2,g3,g4) => {
-      let res = ''
-      if(g1){
-        res = `(${g1}`;
-      }
-      if(g1.length === 3){
-        res += `) `;
-      }
-      if(g2){
-        res += `${g2}`;
-      }
-      if(g3){
-        res += `-${g3}`;
-      }
-      if(g4){
-        res += `-${g4}`;
-      }
-      return res
-    });    
-    /*
-    if(number.length > 0){
-      if(number.length < 3){
-        res = `(${number}`;
-      }else if (number.length < 6) {
-        res = number.replace(/(\d{3})(\d{0,2})/, '($1) $2');
-      }else if (number.length < 8) {
-        res = number.replace(/(\d{3})(\d{0,2})(\d{0,2})/, '($1) $2-$3');
-      }else{
 
-      }
 
-    }*/
-    return formatedNumber;
-  }
+  
 
-  createHeaderSource(){
+  render(){
     return `
-        <header class="header">
-            <div class="container top-radius">
-                <h2>${this.pageName}</h2>
-            </div>
-        </header>   
-    `;
-  }
-
-  createMainSource(){
-    return `
-  <main class="main">
     <div class="container">
       <div class="number">
         <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
@@ -117,46 +74,6 @@ class Keypad {
         <button class="key"> <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span></button>
       </div>
     </div>
-  </main>
     `;    
-  }
-  
-  _createFooterIcon(iconData){
-    return `
-    <a href="${iconData.href}" class="tab ${(iconData.active?'active':'')}">
-        <span class="glyphicon glyphicon-${iconData.icon}" aria-hidden="true"></span>
-        <span class = "tab-text">${iconData.title}</span>
-    </a>`    
-  }
-
-  createFooterSource(){
-    return `
-    <footer class="footer">
-        <div class="container bottom-radius">
-            <nav class="main-nav">
-                ${this._createFooterIcon( { href: "index.html",title: "Contacts",icon: "search"})}
-                ${this._createFooterIcon( { href: "keypad.html",title: "Keypad",icon: "th", active: true})}
-                ${this._createFooterIcon( { href: "edit-contact.html",title: "Edit contact",icon: "pencil"})}
-                ${this._createFooterIcon( { href: "user.html",title: "User",icon: "user"})}
-                ${this._createFooterIcon( { href: "add-user.html",title: "Add user",icon: "plus"})}
-            </nav>
-        </div>
-    </footer>
-    `;    
-  }
-  createPhoneSource(){
-    return `
-    ${this.createHeaderSource()}
-    ${this.createMainSource()}
-    ${this.createFooterSource()}    
-    `;
-  }
-
-  render(){  
-    const phoneSource = this.createPhoneSource(); 
-    this.container.innerHTML = phoneSource;
   }
 }
-
-const keypad = new Keypad('.container-holder');
-keypad.render();
