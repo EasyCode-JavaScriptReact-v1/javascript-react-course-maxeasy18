@@ -1,9 +1,11 @@
 class Contacts {
-  constructor(appContainer) {
+  constructor(app) {
+    this.title = "Contacts";
+    this.app = app;
+    this.appContainer = app.appContainer;
     this.pageName = 'Contacts';
     this.users = [];
     this.usersOrderDirection = 'asc';    
-    this.appContainer = appContainer;
   }
 
   initEvents(){
@@ -12,41 +14,58 @@ class Contacts {
         let sortBy = event.target.getAttribute("data-name");
         this.users = this.sortUsersBy(sortBy);
         this.usersOrderDirection = this.usersOrderDirection == 'asc' ? 'desc' : 'asc';
-        this.updateListOfUsers();
+        this.insertListOfUsersToApp(this.users);
       }
     }); 
-    this.initSearch(); 
     this.getListOfUsers();  
+    this.initSearch(); 
   }
 
+  showUserPage(id){
+    let promisWithUsers = [];
+    const fetcher = new Fetcher();
+    promisWithUsers.push(fetcher.getUser(id));
+    Promise.all(promisWithUsers).then( (user) => {
+      
+    });
+  }
+
+  
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
+      let filteredUsers = this.users;
       if(event.target.value !== ''){
-        this.users = this.findUser(event.target.value);
+        filteredUsers = this.findUser(event.target.value);
       }
-      this.updateListOfUsers();
+      this.insertListOfUsersToApp(filteredUsers);
     });    
   }
 
   getListOfUsers(){
-    if(this.users.length != 0){
+    if(this.users.length != 0 ){
       return false;
     }
-    let promisWithUsers = [];
-    const fetcher = new Fetcher();
-    promisWithUsers.push(fetcher.getUsers());
-    Promise.all(promisWithUsers).then( (users) => {
-      this.users = users[0];
-      this.updateListOfUsers();
+    const serverAPI = this.app.serverAPI;
+    const loadingUsers = serverAPI.getUsers();
+    loadingUsers.then( response => {
+      return response.json();
+    })
+    .then(users => {
+      this.users = users
+      this.insertListOfUsersToApp(this.users);        
+    })
+    .catch( err => {
+      console.error(err.message);
     });
-    // return users;
   }
-  renderListOfUsers(){
-    return this.users.map( user => {
+
+  renderListOfUsers(listOfUsers){
+    return listOfUsers.map( user => {
       const name = user.fullName.split(' ')[0];
       const cname = user.fullName.split(' ')[1] || '';
+      const id = user._id;
       return `
-          <tr>
+          <tr data-page='user' data-user-id="${id}">
             <td>${name}</td>
             <td>${cname}</td>
             <td>${user.email}</td>
@@ -66,16 +85,16 @@ class Contacts {
           </tr>
         </thead>
       <tbody>
-       ${this.renderListOfUsers()}
+       ${this.renderListOfUsers(this.users)}
       </tbody>
     </table>
 
     `;    
   }
 
-  updateListOfUsers(){
+  insertListOfUsersToApp(listOfUsers){
     const containerForList = this.appContainer.querySelector('table > tbody');
-    containerForList.innerHTML = this.renderListOfUsers();
+    containerForList.innerHTML = this.renderListOfUsers(listOfUsers);
   }
 
   createMainSource(){
@@ -116,7 +135,6 @@ class Contacts {
   findUser(value, prop) {
     const letFilterBy = user => {
       if(!prop){
-        console.log(user);
         return user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
           user["fullName"].toLowerCase().indexOf(value.toLowerCase()) !== -1 ||
           user["email"].toLowerCase().indexOf(value.toLowerCase()) !== -1;

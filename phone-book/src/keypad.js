@@ -1,7 +1,9 @@
 class Keypad {
-  constructor(appContainer) {
+  constructor(app) {
+    this.title = "Keypad";    
     this.currentNumber = '';
-    this.appContainer = appContainer;
+    this.app = app;
+    this.appContainer = app.appContainer;
   }
 
   initEvents(){
@@ -40,35 +42,11 @@ class Keypad {
     if( number && /^[\d\*#]$/.test(number) && this.currentNumber.length < 10){
       this.currentNumber += number;
     }
-    const formatedNumber = this.formatformNumber(this.currentNumber);
+    const formatedNumber = this.app.formatformNumber(this.currentNumber);
     this.appContainer.querySelector('main span.numbers').innerHTML = formatedNumber
   }
 
-  formatformNumber(number) {
-    if(isNaN(number.charAt(0))){
-      return number;
-    }
-    const formatedNumber = number.replace(/(\d{0,3})(\d{0,2})?(\d{0,2})?(\d{0,3})?/, (match,g1,g2,g3,g4) => {
-      let res = ''
-      if(g1){
-        res = `(${g1}`;
-      }
-      if(g1.length === 3){
-        res += `) `;
-      }
-      if(g2){
-        res += `${g2}`;
-      }
-      if(g3){
-        res += `-${g3}`;
-      }
-      if(g4){
-        res += `-${g4}`;
-      }
-      return res
-    });    
-    return formatedNumber;
-  }
+
 
   
 

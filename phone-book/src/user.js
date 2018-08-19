@@ -1,19 +1,74 @@
 
 
 class User {
-  constructor(appContainer) {
-    this.appContainer = appContainer;
+  constructor(app) {
+    this.title = "User";
+    this.appContainer = app.appContainer;
+    this.app = app;
   }
 
   initEvents(){
 
+    this.getUser();  
+
   }
   
+  getUser(){
+
+    const userId = this.app.state.userId;
+    if(this.user && this.user._id == userId){
+      this.fillPageWithUsersData();
+      return false;
+    }
+    const serverAPI = this.app.serverAPI;
+    const loadingUser = serverAPI.getUser(userId);
+    loadingUser.then( response => {
+      return response.json();
+    })
+    .then(user => {
+      this.user = user
+      this.fillPageWithUsersData();
+    })
+    .catch( err => {
+      console.error(err.message);
+    });
+
+  }
+
+  fillPageWithUsersData(){
+    this.updateName();
+    this.updateEmail();
+    this.updatePhone();
+    this.setUserIDtoAttribute();
+  }
+
+  updateName(){
+    const nameNode = this.app.appContainer.querySelector('main div.user-name');
+    nameNode.innerHTML = this.user.fullName
+
+  }
+
+  updatePhone(){
+    const phoneNode = this.app.appContainer.querySelector('main div.tel-number > div');
+    const formattedNumber = this.app.formatformNumber(this.user.phone);
+    phoneNode.innerHTML = formattedNumber;    
+  } 
+
+  setUserIDtoAttribute(){
+    const editLinks = this.app.appContainer.querySelectorAll("main a.editUser");
+    editLinks.forEach( link => {
+      link.setAttribute('data-user-id', this.user._id);
+    });
+
+  }
+  updateEmail(){
+
+  }
+
   render(){
     return `
       <div class="container">
-        <img src="images/user-face.png" alt="#" class=" user-img img-circle center-block">
-        <div class="user-name">User Name</div>
+        <div class="user-name"><span class='loading'>Loading name...</span></div>
         <div class="options-line">
           <div class="message">
             <div class= "options-icon"><span class="icon glyphicon glyphicon-comment" aria-hidden="true"></span></div>
@@ -34,21 +89,12 @@ class User {
         </div>
         <div class="tel-number">
           <h3>mobile</h3>
-          <div> +38 (093) 989 89 89</div>
-        </div>
-        <div class="tel-number">
-          <h3>home</h3>
-          <div> +38 (093) 989 89 89</div>
+          <div><span class='loading'>Loading phone number...</span></div>
         </div>
         <div class="options-table">
-          <div class ="options-item"><a href="#">Notes</a></div>
-          <div class ="options-item"><a href="#">Send message</a></div>
-          <div class ="options-item"><a href="#">Share contact</a></div>
-          <div class ="options-item"><a href="#">Add to favorites</a></div>
-          <div class ="options-item"><a href="#">Share my location</a></div>
-          <div class ="options-item"><a href="#">Block this caller</a></div>
+          <div class ="options-item"><a href="#" class="editUser" data-page="editUser">Edit User</a></div>
         </div>
       </div>
-    `;    
+    `; 
   }
 }
