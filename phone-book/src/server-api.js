@@ -9,7 +9,7 @@ class ServerAPI{
     return fetch(this.url + '/users/' + id); 
   }
   addUser(data){
-    fetch(this.url + '/users' , {
+    return fetch(this.url + '/users' , {
       headers : {
         'Content-Type': 'application/json'
       },
@@ -17,4 +17,18 @@ class ServerAPI{
       body: JSON.stringify(data)
     });    
   }
+  deleteUser(id){
+    return fetch(this.url + '/users/' + id , {
+      method: "DELETE",
+    });     
+  }
+  updateUser(data){
+    return fetch(this.url + '/users/' + data.userId , {
+      headers : {
+        'Content-Type': 'application/json'
+      },
+      method: "PATCH",
+      body: JSON.stringify(data)
+    });    
+  }  
 }

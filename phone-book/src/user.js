@@ -55,7 +55,7 @@ class User {
   } 
 
   setUserIDtoAttribute(){
-    const editLinks = this.app.appContainer.querySelectorAll("main [data-page='editContact']");
+    const editLinks = this.app.appContainer.querySelectorAll("main a.editUser");
     editLinks.forEach( link => {
       link.setAttribute('data-user-id', this.user._id);
     });
@@ -68,7 +68,6 @@ class User {
   render(){
     return `
       <div class="container">
-        <img src="images/user-face.png" alt="#" class=" user-img img-circle center-block">
         <div class="user-name"><span class='loading'>Loading name...</span></div>
         <div class="options-line">
           <div class="message">
@@ -93,13 +92,7 @@ class User {
           <div><span class='loading'>Loading phone number...</span></div>
         </div>
         <div class="options-table">
-          <div class ="options-item"><a href="#">Notes</a></div>
-          <div class ="options-item"><a href="#">Send message</a></div>
-          <div class ="options-item"><a href="#">Share contact</a></div>
-          <div class ="options-item"><a href="#">Add to favorites</a></div>
-          <div class ="options-item"><a href="#">Share my location</a></div>
-          <div class ="options-item"><a href="#">Block this caller</a></div>
-          <div class ="options-item"><a href="#" data-page="editContact">Edit User</a></div>
+          <div class ="options-item"><a href="#" class="editUser" data-page="editUser">Edit User</a></div>
         </div>
       </div>
     `; 

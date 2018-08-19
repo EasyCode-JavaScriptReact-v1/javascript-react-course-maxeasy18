@@ -1,7 +1,7 @@
 class Contacts {
   constructor(app) {
-    this.app = app;
     this.title = "Contacts";
+    this.app = app;
     this.appContainer = app.appContainer;
     this.pageName = 'Contacts';
     this.users = [];
@@ -42,7 +42,7 @@ class Contacts {
   }
 
   getListOfUsers(){
-    if(this.users.length != 0){
+    if(this.users.length != 0 ){
       return false;
     }
     const serverAPI = this.app.serverAPI;

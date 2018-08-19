@@ -162,6 +162,7 @@ h3 {
   width: 100px;
   height: 100px;
   margin-bottom: 10px;
+  float:left;
 }
 
 .user-name {
@@ -304,9 +305,11 @@ h3 {
   margin-right: 10px;
 }
 
-.add-btn span:last-child{
+.edit-field span:last-child{
   display: inline-block;
   padding: 2px 3px;
+  width: 150px;
+  border: 1px solid black;
 }
 
 .add-btn:hover, .add-btn:focus, .add-btn:active {
@@ -317,8 +320,11 @@ h3 {
   background-color: black;
 }
 
-.delete-contact {
+.edit-contact {
   color: #e32910;
   margin: 0 auto;
   font-weight: bold;
+}
+.delete-contact{
+  display: none;
 }

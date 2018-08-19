@@ -4,6 +4,7 @@ class App {
     this.appContainer = document.getElementById(appContainerId);
     this.router = new Router(this);
     this.serverAPI = new ServerAPI();
+    const userPage = new EditUser(this);
     this.pages = {
       contacts : {
         pageObject : new Contacts(this),
@@ -13,8 +14,8 @@ class App {
         pageObject : new Keypad(this),
         href : '/keypad.html'
       },
-      editContact : {
-        pageObject : new EditContact(this.appContainer),
+      editUser : {
+        pageObject : userPage,
         href : '/edit-contact.html'
       },
       user : {
@@ -22,7 +23,7 @@ class App {
         href : '/user.html'
       },
       addUser : {
-        pageObject : new AddUser(this.appContainer),
+        pageObject : userPage,
         href : '/add-user.html'
       }
     }
@@ -40,6 +41,8 @@ class App {
   updateState(newState){
     this.state = {};
     Object.assign(this.state,newState);
+
+
   }
 
   addRouter(){
@@ -138,7 +141,7 @@ class App {
             <nav class="main-nav">
                 ${this._createFooterIcon( { href: "index.html", page:"contacts", title: "Contacts",icon: "search", active: true})}
                 ${this._createFooterIcon( { href: "keypad.html", page:"keypad", title: "Keypad",icon: "th",})}
-                ${this._createFooterIcon( { href: "edit-contact.html", page:"editContact", title: "Edit contact",icon: "pencil",})}
+                ${this._createFooterIcon( { href: "edit-contact.html", page:"editUser", title: "Edit contact",icon: "pencil",})}
                 ${this._createFooterIcon( { href: "user.html", page:"user", title: "User",icon: "user",})}
                 ${this._createFooterIcon( { href: "add-user.html", page:"addUser", title: "Add user",icon: "plus",})}
             </nav>
