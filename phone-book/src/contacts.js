@@ -19,7 +19,6 @@ class Contacts {
     }); 
     this.getListOfUsers();  
     this.initSearch(); 
-    this.initClickOnUser()
   }
 
   showUserPage(id){
@@ -31,23 +30,7 @@ class Contacts {
     });
   }
 
-  initClickOnUser(){
-    this.appContainer.querySelector("main > div.container").addEventListener('click', event => {
-      const container = event.currentTarget;
-      let target = event.target;
-      while (target != container) {
-        if (target.nodeName == 'TR' && target.parentNode.nodeName == 'TBODY') {
-          const id = target.getAttribute("data-user_id");
-          this.app.updateState({activePage : 'user', userId : id });
-          this.app.router.gotToPage({activePage : 'user', userId : id },'/user.html');
-          this.app.changePageToActive();          
-          return;
-        }
-        target = target.parentNode;
-      }
-    });     
-
-  }
+  
   initSearch(){
     document.getElementById('search').addEventListener('keyup', (event) => {
       let filteredUsers = this.users;
@@ -75,14 +58,14 @@ class Contacts {
       console.error(err.message);
     });
   }
-  
+
   renderListOfUsers(listOfUsers){
     return listOfUsers.map( user => {
       const name = user.fullName.split(' ')[0];
       const cname = user.fullName.split(' ')[1] || '';
       const id = user._id;
       return `
-          <tr data-user_id="${id}">
+          <tr data-page='user' data-user-id="${id}">
             <td>${name}</td>
             <td>${cname}</td>
             <td>${user.email}</td>

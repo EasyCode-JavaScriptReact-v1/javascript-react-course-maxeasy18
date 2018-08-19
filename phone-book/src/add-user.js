@@ -1,9 +1,10 @@
 
 
 class AddUser {
-  constructor(appContainer) {
+  constructor(app) {
     this.title = 'Add User'
-    this.appContainer = appContainer;
+    this.app = app;
+    this.appContainer = app.appContainer;
   }
 
   initEvents(){
@@ -21,19 +22,10 @@ class AddUser {
           <div class="main-info-holder">
             <div class="edit-field">
               <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>First Name</span>
+                <span>Full name</span>
               </button>
             </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>Last Name</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>Company</span>
-              </button>
-            </div>
+            
           </div>
         </div>
         <div class="scroll-holder">
@@ -45,36 +37,11 @@ class AddUser {
             </div>
             <div class="edit-field">
               <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>add  home phone</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
                 <span>add email</span>
               </button>
             </div>
             <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>add address</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>add birthday</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>add social profile</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="add-btn"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-                <span>add field</span>
-              </button>
-            </div>
-            <div class="edit-field">
-              <button href="#" class="delete-contact">delete contact</button>
+              <button href="#" class="delete-contact">Save contact</button>
             </div>
           </div>
         </div>

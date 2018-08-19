@@ -214,6 +214,10 @@ h3 {
   font-size: 16px;
 }
 
+.loading{
+  color:gray;
+}
+
 .options-table {
   margin-bottom: 20px;
   font-size: 16px;

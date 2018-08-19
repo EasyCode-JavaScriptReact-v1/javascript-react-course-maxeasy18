@@ -7,5 +7,14 @@ class ServerAPI{
   }
   getUser(id){
     return fetch(this.url + '/users/' + id); 
-  }  
+  }
+  addUser(data){
+    fetch(this.url + '/users' , {
+      headers : {
+        'Content-Type': 'application/json'
+      },
+      method: "POST",
+      body: JSON.stringify(data)
+    });    
+  }
 }

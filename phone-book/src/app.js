@@ -5,20 +5,35 @@ class App {
     this.router = new Router(this);
     this.serverAPI = new ServerAPI();
     this.pages = {
-      contacts : new Contacts(this),
-      keypad : new Keypad(this.appContainer),
-      editContact : new EditContact(this.appContainer),
-      user : new User(this),
-      addUser : new AddUser(this.appContainer),
+      contacts : {
+        pageObject : new Contacts(this),
+        href : '/contacts.html'
+      },
+      keypad : {
+        pageObject : new Keypad(this),
+        href : '/keypad.html'
+      },
+      editContact : {
+        pageObject : new EditContact(this.appContainer),
+        href : '/edit-contact.html'
+      },
+      user : {
+        pageObject : new User(this),
+        href : '/user.html'
+      },
+      addUser : {
+        pageObject : new AddUser(this.appContainer),
+        href : '/add-user.html'
+      }
     }
 
     const appHtml = this.renderAppContainer();
     this.appContainer.innerHTML = appHtml;
-    this.addRouterToFooter();
+    this.addRouter();
 
     this.state.pageName = 'Contacts';
     this.updateState({activePage : 'contacts'});
-    this.router.gotToPage({activePage : 'contacts'},'/index.html');
+    this.router.gotToPage(this.state,'/index.html');
     this.changePageToActive();
   }
 
@@ -27,18 +42,21 @@ class App {
     Object.assign(this.state,newState);
   }
 
-  addRouterToFooter(){
-    const tabs = this.appContainer.querySelector("nav.main-nav");
-    tabs.addEventListener('click', (event) => {
+  addRouter(){
+    this.appContainer.addEventListener('click', (event) => {
       event.preventDefault();
       const container = event.currentTarget;
       let target = event.target;
       while (target != container) {
-        if (target.nodeName == 'A' && target.classList.contains('tab') ) {
-          const href = target.href;
+        if (target.getAttribute("data-page") ) {
           const newPage = target.getAttribute("data-page");
-          this.updateState({activePage : newPage});          
-          this.router.gotToPage({activePage : newPage},href);
+          const newUser = target.getAttribute("data-user-id");
+          const newState = { activePage : newPage };
+          if(newUser){
+            newState.userId = newUser;
+          }
+          this.updateState(newState);          
+          this.router.gotToPage(this.state);
           this.changePageToActive();
           return;
         }
@@ -60,7 +78,7 @@ class App {
 
   getCurrentPage(){
     const activePage = this.state.activePage;
-    const currentPage = this.pages[activePage];  
+    const currentPage = this.pages[activePage].pageObject;  
     return currentPage;  
   }
 
@@ -75,6 +93,32 @@ class App {
     ${this.renderAppPage()}
     ${this.renderAppFooter()}    
     `;
+  }
+
+  formatformNumber(number) {
+    if(isNaN(number.charAt(0))){
+      return number;
+    }
+    const formatedNumber = number.replace(/(\d{0,3})(\d{0,2})?(\d{0,2})?(\d{0,3})?/, (match,g1,g2,g3,g4) => {
+      let res = ''
+      if(g1){
+        res = `(${g1}`;
+      }
+      if(g1.length === 3){
+        res += `) `;
+      }
+      if(g2){
+        res += `${g2}`;
+      }
+      if(g3){
+        res += `-${g3}`;
+      }
+      if(g4){
+        res += `-${g4}`;
+      }
+      return res
+    });    
+    return formatedNumber;
   }
 
   renderAppHead(){
