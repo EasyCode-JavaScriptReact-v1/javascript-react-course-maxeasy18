@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home work 14</title>
+	<style>
+		*{
+			margin:0;
+			padding: 0;
+			font-size: 16px;
+			font-family: Arial;	
+			box-sizing: border-box;	
+		}
+		div.test-block{
+			margin: 20px 50px;
+		}
+		div.test-block p{
+			text-align: center;
+			margin-bottom: 40px;
+		}
+		form > ol{
+			padding-left: 25px;
+			margin-bottom: 25px;
+		}
+		form > ol > li {
+			margin-bottom: 25px;
+		}
+		form > ol > li > span.status{
+			display: none;
+			font-weight: bold;
+		}
+		form > ol > li > span.status.correct,form > ol > li > span.status.wrong{
+			display: inline;
+		}
+		form > ol > li > span.status.correct{
+			color:green;
+		}
+		form > ol > li > span.status.correct:after{
+			content: 'correct';
+		}
+		form > ol > li > span.status.wrong{
+			color:red;
+		}
+		form > ol > li > span.status.wrong:after{
+			content: 'wrong';
+		}		
+		form > ol > li > ul {
+			margin-top: 15px;
+		}
+		form > ol > li > ul > li{
+			list-style: none;
+			padding: 5px 0;
+		}
+		form input{
+			background-color: lightblue;
+		}
+		form input[type='submit']{
+			padding: 7px;
+		}
+	</style>
+</head>
+<body>
+	<script src="src/main.js"></script>
+</body>
+</html>
